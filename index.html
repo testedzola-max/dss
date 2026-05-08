@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Circle India — CRM Dashboards</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #F7F6F3;
+    --bg-card: #FFFFFF;
+    --bg-surface: #F0EFEC;
+    --bg-hover: #E8E7E3;
+    --text-primary: #1A1A1A;
+    --text-secondary: #6B6966;
+    --text-tertiary: #9C9A92;
+    --border: rgba(0,0,0,0.08);
+    --border-strong: rgba(0,0,0,0.14);
+    --accent: #3D5AFE;
+    --accent-light: #E8ECFF;
+    --green-bg: #E8F5E9; --green-text: #1B5E20;
+    --amber-bg: #FFF8E1; --amber-text: #E65100;
+    --red-bg: #FFEBEE; --red-text: #B71C1C;
+    --blue-bg: #E3F2FD; --blue-text: #0D47A1;
+    --purple-bg: #EDE7F6; --purple-text: #4527A0;
+    --teal-bg: #E0F2F1; --teal-text: #004D40;
+    --gray-bg: #ECEFF1; --gray-text: #37474F;
+    --radius: 10px;
+    --radius-lg: 14px;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md: 0 2px 8px rgba(0,0,0,0.06);
+    --font: 'DM Sans', -apple-system, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Header */
+  .header {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 32px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .logo-area {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .logo-mark {
+    width: 38px; height: 38px;
+    background: linear-gradient(135deg, #3D5AFE 0%, #7C4DFF 100%);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: 700; font-size: 15px;
+    letter-spacing: -0.5px;
+  }
+  .logo-text h1 {
+    font-size: 17px; font-weight: 700; line-height: 1.2;
+    letter-spacing: -0.3px;
+  }
+  .logo-text span {
+    font-size: 12px; color: var(--text-tertiary); font-weight: 500;
+    letter-spacing: 0.5px; text-transform: uppercase;
+  }
+  .header-meta {
+    font-size: 13px; color: var(--text-secondary);
+    display: flex; align-items: center; gap: 16px;
+  }
+  .fy-badge {
+    background: var(--accent-light); color: var(--accent);
+    font-size: 12px; font-weight: 600; padding: 4px 12px;
+    border-radius: 6px;
+  }
+
+  /* Tabs */
+  .tabs {
+    display: flex; gap: 0; overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab {
+    padding: 10px 20px;
+    font-size: 13px; font-weight: 500;
+    color: var(--text-secondary);
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+    background: none; border-top: none; border-left: none; border-right: none;
+    font-family: var(--font);
+  }
+  .tab:hover { color: var(--text-primary); }
+  .tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* Main content */
+  .main { padding: 24px 32px 48px; max-width: 1280px; margin: 0 auto; }
+  .dashboard { display: none; animation: fadeIn 0.3s ease; }
+  .dashboard.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* Metric cards */
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .metric-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 18px 20px;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.2s;
+  }
+  .metric-card:hover { box-shadow: var(--shadow-md); }
+  .metric-label {
+    font-size: 12px; color: var(--text-tertiary);
+    font-weight: 500; text-transform: uppercase;
+    letter-spacing: 0.4px; margin-bottom: 6px;
+  }
+  .metric-value {
+    font-size: 26px; font-weight: 700;
+    letter-spacing: -0.5px; line-height: 1.1;
+  }
+  .metric-value.danger { color: var(--red-text); }
+  .metric-value.warning { color: var(--amber-text); }
+  .metric-sub {
+    font-size: 12px; color: var(--text-tertiary); margin-top: 4px;
+  }
+
+  /* Section */
+  .section { margin-bottom: 24px; }
+  .section-title {
+    font-size: 14px; font-weight: 600; margin-bottom: 12px;
+    letter-spacing: -0.2px;
+  }
+
+  /* Grid */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  /* Chart cards */
+  .chart-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    box-shadow: var(--shadow-sm);
+  }
+  .chart-card h3 {
+    font-size: 13px; font-weight: 600; margin-bottom: 14px;
+    letter-spacing: -0.1px;
+  }
+  .chart-wrap {
+    position: relative;
+    width: 100%;
+    height: 240px;
+  }
+  .chart-legend {
+    display: flex; flex-wrap: wrap; gap: 14px;
+    margin-top: 12px; font-size: 12px; color: var(--text-secondary);
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 5px;
+  }
+  .legend-dot {
+    width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0;
+  }
+
+  /* Tables */
+  .table-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+  }
+  table {
+    width: 100%; border-collapse: collapse; font-size: 13px;
+  }
+  thead tr {
+    background: var(--bg-surface);
+  }
+  th {
+    padding: 10px 14px;
+    font-weight: 600; font-size: 11px;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-align: left;
+  }
+  td {
+    padding: 11px 14px;
+    border-top: 1px solid var(--border);
+    color: var(--text-primary);
+  }
+  tr:hover td { background: var(--bg-surface); }
+
+  /* Pills / badges */
+  .pill {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    white-space: nowrap;
+  }
+  .pill-green { background: var(--green-bg); color: var(--green-text); }
+  .pill-amber { background: var(--amber-bg); color: var(--amber-text); }
+  .pill-red { background: var(--red-bg); color: var(--red-text); }
+  .pill-blue { background: var(--blue-bg); color: var(--blue-text); }
+  .pill-purple { background: var(--purple-bg); color: var(--purple-text); }
+  .pill-teal { background: var(--teal-bg); color: var(--teal-text); }
+  .pill-gray { background: var(--gray-bg); color: var(--gray-text); }
+
+  /* Alert cards */
+  .alert-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .alert-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    transition: box-shadow 0.2s;
+  }
+  .alert-card:hover { box-shadow: var(--shadow-md); }
+  .alert-card-top {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 4px;
+  }
+  .alert-card-top span:first-child {
+    font-size: 13px; font-weight: 600;
+  }
+  .alert-card p {
+    font-size: 12px; color: var(--text-secondary);
+  }
+
+  /* Scorecard emphasis */
+  .text-right { text-align: right; }
+  .text-center { text-align: center; }
+  .fw-600 { font-weight: 600; }
+  .text-muted { color: var(--text-secondary); }
+  .text-mono { font-family: var(--mono); font-size: 12px; }
+
+  .check { color: var(--green-text); font-weight: 700; }
+  .cross { color: var(--red-text); font-weight: 700; }
+
+  @media (max-width: 768px) {
+    .metrics { grid-template-columns: repeat(2, 1fr); }
+    .grid-2 { grid-template-columns: 1fr; }
+    .alert-row { grid-template-columns: 1fr; }
+    .header { padding: 16px 16px 0; }
+    .main { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div class="logo-area">
+      <div class="logo-mark">TCI</div>
+      <div class="logo-text">
+        <h1>The Circle India</h1>
+        <span>Fundraising CRM</span>
+      </div>
+    </div>
+    <div class="header-meta">
+      <span class="fy-badge">FY 2025–26</span>
+      <span>Last updated: 01 Apr 2026</span>
+    </div>
+  </div>
+  <div class="tabs">
+    <button class="tab active" onclick="showTab(0)">Pipeline overview</button>
+    <button class="tab" onclick="showTab(1)">Deal management</button>
+    <button class="tab" onclick="showTab(2)">Donor engagement</button>
+    <button class="tab" onclick="showTab(3)">Team performance</button>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- ============ DASHBOARD 1: Pipeline Overview ============ -->
+  <div class="dashboard active" id="dash-0">
+    <div class="metrics">
+      <div class="metric-card">
+        <div class="metric-label">Active leads</div>
+        <div class="metric-value">47</div>
+        <div class="metric-sub">+6 this month</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Pipeline value</div>
+        <div class="metric-value">₹4.2 Cr</div>
+        <div class="metric-sub">Across all stages</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Conversion rate</div>
+        <div class="metric-value">18%</div>
+        <div class="metric-sub">Lead → Deal</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Deals won (FY)</div>
+        <div class="metric-value">12</div>
+        <div class="metric-sub">₹2.8 Cr secured</div>
+      </div>
+    </div>
+
+    <div class="grid-2 section">
+      <div class="chart-card">
+        <h3>Lead funnel by stage</h3>
+        <div class="chart-wrap"><canvas id="c-funnel"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Pipeline value by programme</h3>
+        <div class="chart-wrap"><canvas id="c-program"></canvas></div>
+        <div class="chart-legend">
+          <span class="legend-item"><span class="legend-dot" style="background:#5C4FD6"></span>Incubation ₹1.8 Cr</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#0E8A6A"></span>Labs ₹0.9 Cr</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#D85A30"></span>CircleU ₹1.0 Cr</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#888880"></span>Non-program ₹0.5 Cr</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Upcoming follow-ups (next 7 days)</div>
+      <div class="table-card">
+        <table>
+          <thead>
+            <tr>
+              <th>Lead name</th>
+              <th>Organisation</th>
+              <th>Stage</th>
+              <th>Engagement heat</th>
+              <th>Amount asked</th>
+              <th class="text-right">Follow-up date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="fw-600">Rajesh Mehta</td>
+              <td>Tata Trusts</td>
+              <td><span class="pill pill-amber">Proposal</span></td>
+              <td><span class="pill pill-red">Hot</span></td>
+              <td class="text-mono">₹80,00,000</td>
+              <td class="text-right text-muted">02 Apr 2026</td>
+            </tr>
+            <tr>
+              <td class="fw-600">Meera Iyer</td>
+              <td>HDFC CSR</td>
+              <td><span class="pill pill-blue">Negotiation</span></td>
+              <td><span class="pill pill-red">Hot</span></td>
+              <td class="text-mono">₹1,20,00,000</td>
+              <td class="text-right text-muted">03 Apr 2026</td>
+            </tr>
+            <tr>
+              <td class="fw-600">Anil Kapoor</td>
+              <td>EdelGive Foundation</td>
+              <td><span class="pill pill-teal">Explore</span></td>
+              <td><span class="pill pill-amber">Warm</span></td>
+              <td class="text-mono">—</td>
+              <td class="text-right text-muted">05 Apr 2026</td>
+            </tr>
+            <tr>
+              <td class="fw-600">Fatima Sheikh</td>
+              <td>Azim Premji Foundation</td>
+              <td><span class="pill pill-purple">Contact/Intro</span></td>
+              <td><span class="pill pill-blue">Cold</span></td>
+              <td class="text-mono">—</td>
+              <td class="text-right text-muted">07 Apr 2026</td>
+            </tr>
+            <tr>
+              <td class="fw-600">Vikram Desai</td>
+              <td>Individual</td>
+              <td><span class="pill pill-amber">Proposal</span></td>
+              <td><span class="pill pill-amber">Warm</span></td>
+              <td class="text-mono">₹25,00,000</td>
+              <td class="text-right text-muted">07 Apr 2026</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ DASHBOARD 2: Deal Management ============ -->
+  <div class="dashboard" id="dash-1">
+    <div class="metrics">
+      <div class="metric-card">
+        <div class="metric-label">Deals won (FY)</div>
+        <div class="metric-value">12</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Total received</div>
+        <div class="metric-value">₹2.8 Cr</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Restricted funding</div>
+        <div class="metric-value">₹2.1 Cr</div>
+        <div class="metric-sub">75% of total</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Overdue reports</div>
+        <div class="metric-value warning">3</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Active deals overview</div>
+      <div class="table-card">
+        <table>
+          <thead>
+            <tr>
+              <th>Deal code</th>
+              <th>Deal name</th>
+              <th class="text-center">Stage</th>
+              <th class="text-center">Funding type</th>
+              <th class="text-right">Amount</th>
+              <th class="text-center">Programme</th>
+              <th class="text-center">End date</th>
+              <th>Owner</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-mono">DL-2025-001</td>
+              <td class="fw-600">Tata Trusts — Labs</td>
+              <td class="text-center"><span class="pill pill-green">Won</span></td>
+              <td class="text-center"><span class="pill pill-purple">Restricted</span></td>
+              <td class="text-right text-mono">₹80,00,000</td>
+              <td class="text-center">Labs</td>
+              <td class="text-center text-muted">Mar 2026</td>
+              <td>Ananya S.</td>
+            </tr>
+            <tr>
+              <td class="text-mono">DL-2025-003</td>
+              <td class="fw-600">HDFC CSR — Incubation</td>
+              <td class="text-center"><span class="pill pill-green">Won</span></td>
+              <td class="text-center"><span class="pill pill-purple">Restricted</span></td>
+              <td class="text-right text-mono">₹1,20,00,000</td>
+              <td class="text-center">Incubation</td>
+              <td class="text-center text-muted">Sep 2026</td>
+              <td>Rahul M.</td>
+            </tr>
+            <tr>
+              <td class="text-mono">DL-2025-005</td>
+              <td class="fw-600">Individual — General</td>
+              <td class="text-center"><span class="pill pill-blue">Open</span></td>
+              <td class="text-center"><span class="pill pill-gray">Unrestricted</span></td>
+              <td class="text-right text-mono">₹15,00,000</td>
+              <td class="text-center text-muted">—</td>
+              <td class="text-center text-muted">—</td>
+              <td>Priya K.</td>
+            </tr>
+            <tr>
+              <td class="text-mono">DL-2025-007</td>
+              <td class="fw-600">EdelGive — CircleU</td>
+              <td class="text-center"><span class="pill pill-green">Won</span></td>
+              <td class="text-center"><span class="pill pill-purple">Restricted</span></td>
+              <td class="text-right text-mono">₹50,00,000</td>
+              <td class="text-center">CircleU</td>
+              <td class="text-center text-muted">Dec 2025</td>
+              <td>Deepak R.</td>
+            </tr>
+            <tr>
+              <td class="text-mono">DL-2025-009</td>
+              <td class="fw-600">Wipro CSR — Labs</td>
+              <td class="text-center"><span class="pill pill-green">Won</span></td>
+              <td class="text-center"><span class="pill pill-purple">Restricted</span></td>
+              <td class="text-right text-mono">₹35,00,000</td>
+              <td class="text-center">Labs</td>
+              <td class="text-center text-muted">Jan 2026</td>
+              <td>Ananya S.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="grid-2 section">
+      <div class="chart-card">
+        <h3>Won deals by programme</h3>
+        <div class="chart-wrap"><canvas id="c-deal-prog"></canvas></div>
+        <div class="chart-legend">
+          <span class="legend-item"><span class="legend-dot" style="background:#5C4FD6"></span>Incubation</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#0E8A6A"></span>Labs</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#D85A30"></span>CircleU</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#888880"></span>Non-program</span>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h3>Restricted vs unrestricted (FY)</h3>
+        <div class="chart-wrap"><canvas id="c-funding"></canvas></div>
+        <div class="chart-legend">
+          <span class="legend-item"><span class="legend-dot" style="background:#5C4FD6"></span>Restricted ₹2.1 Cr</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#888880"></span>Unrestricted ₹0.7 Cr</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Reporting cycle deadlines (next 30 days)</div>
+      <div class="table-card">
+        <table>
+          <thead>
+            <tr>
+              <th>Deal</th>
+              <th>Report type</th>
+              <th class="text-center">Frequency</th>
+              <th class="text-center">Due date</th>
+              <th class="text-center">Status</th>
+              <th>Owner</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-mono">DL-2025-003</td>
+              <td>Programme</td>
+              <td class="text-center">Monthly</td>
+              <td class="text-center text-muted">28 Mar 2026</td>
+              <td class="text-center"><span class="pill pill-red">Overdue</span></td>
+              <td>Rahul M.</td>
+            </tr>
+            <tr>
+              <td class="text-mono">DL-2025-005</td>
+              <td>Programme</td>
+              <td class="text-center">Quarterly</td>
+              <td class="text-center text-muted">31 Mar 2026</td>
+              <td class="text-center"><span class="pill pill-red">Overdue</span></td>
+              <td>Priya K.</td>
+            </tr>
+            <tr>
+              <td class="text-mono">DL-2025-001</td>
+              <td>Financial</td>
+              <td class="text-center">Quarterly</td>
+              <td class="text-center text-muted">10 Apr 2026</td>
+              <td class="text-center"><span class="pill pill-amber">Due soon</span></td>
+              <td>Ananya S.</td>
+            </tr>
+            <tr>
+              <td class="text-mono">DL-2025-007</td>
+              <td>Financial</td>
+              <td class="text-center">Bi-annually</td>
+              <td class="text-center text-muted">25 Apr 2026</td>
+              <td class="text-center"><span class="pill pill-green">On track</span></td>
+              <td>Deepak R.</td>
+            </tr>
+            <tr>
+              <td class="text-mono">DL-2025-001</td>
+              <td>Programme</td>
+              <td class="text-center">Monthly</td>
+              <td class="text-center text-muted">30 Apr 2026</td>
+              <td class="text-center"><span class="pill pill-green">On track</span></td>
+              <td>Ananya S.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Deals approaching end date (next 90 days)</div>
+      <div class="alert-row">
+        <div class="alert-card">
+          <div class="alert-card-top">
+            <span>DL-2025-007 — EdelGive CircleU</span>
+            <span class="pill pill-red">Dec 2025</span>
+          </div>
+          <p>₹50 L · Restricted · Owner: Deepak R.</p>
+        </div>
+        <div class="alert-card">
+          <div class="alert-card-top">
+            <span>DL-2025-009 — Wipro CSR Labs</span>
+            <span class="pill pill-amber">Jan 2026</span>
+          </div>
+          <p>₹35 L · Restricted · Owner: Ananya S.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ DASHBOARD 3: Donor Engagement ============ -->
+  <div class="dashboard" id="dash-2">
+    <div class="metrics">
+      <div class="metric-card">
+        <div class="metric-label">Total accounts</div>
+        <div class="metric-value">34</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Active contacts</div>
+        <div class="metric-value">89</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Hot leads</div>
+        <div class="metric-value">9</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">FCRA donors</div>
+        <div class="metric-value">6</div>
+      </div>
+    </div>
+
+    <div class="grid-2 section">
+      <div class="chart-card">
+        <h3>Leads by source</h3>
+        <div class="chart-wrap"><canvas id="c-source"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Donors by type (Accounts)</h3>
+        <div class="chart-wrap"><canvas id="c-type"></canvas></div>
+        <div class="chart-legend">
+          <span class="legend-item"><span class="legend-dot" style="background:#5C4FD6"></span>CSR</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#0E8A6A"></span>Foundation</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#D85A30"></span>Individual</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#3D7AE2"></span>Bi-lateral</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#6D9E22"></span>Government</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#888880"></span>Institution</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2 section">
+      <div class="chart-card">
+        <h3>Engagement heat × stage</h3>
+        <div class="chart-wrap"><canvas id="c-heat"></canvas></div>
+        <div class="chart-legend">
+          <span class="legend-item"><span class="legend-dot" style="background:#E24B4A"></span>Hot</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#EF9F27"></span>Warm</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#85B7EB"></span>Cold</span>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h3>Giving capacity distribution</h3>
+        <div class="chart-wrap"><canvas id="c-capacity"></canvas></div>
+      </div>
+    </div>
+
+    <div class="grid-2 section">
+      <div class="chart-card">
+        <h3>Funding origin split</h3>
+        <div class="chart-wrap"><canvas id="c-fcra"></canvas></div>
+        <div class="chart-legend">
+          <span class="legend-item"><span class="legend-dot" style="background:#0E8A6A"></span>Local</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#3D7AE2"></span>FCRA</span>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h3>Leads by programme interest</h3>
+        <div class="chart-wrap"><canvas id="c-interest"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ DASHBOARD 4: Team Performance ============ -->
+  <div class="dashboard" id="dash-3">
+    <div class="metrics">
+      <div class="metric-card">
+        <div class="metric-label">Total team leads</div>
+        <div class="metric-value">47</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Proposals sent (FY)</div>
+        <div class="metric-value">15</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Avg. conversion</div>
+        <div class="metric-value">25%</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Overdue follow-ups</div>
+        <div class="metric-value danger">4</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Fundraiser scorecard</div>
+      <div class="table-card">
+        <table>
+          <thead>
+            <tr>
+              <th>Owner</th>
+              <th class="text-center">Active leads</th>
+              <th class="text-center">Proposals</th>
+              <th class="text-center">Deals won</th>
+              <th class="text-right">Value won</th>
+              <th class="text-center">Conv. %</th>
+              <th class="text-center">Overdue follow-ups</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="fw-600">Ananya S.</td>
+              <td class="text-center">14</td>
+              <td class="text-center">6</td>
+              <td class="text-center">4</td>
+              <td class="text-right text-mono">₹1,20,00,000</td>
+              <td class="text-center"><span class="pill pill-green">29%</span></td>
+              <td class="text-center">0</td>
+            </tr>
+            <tr>
+              <td class="fw-600">Rahul M.</td>
+              <td class="text-center">12</td>
+              <td class="text-center">4</td>
+              <td class="text-center">3</td>
+              <td class="text-right text-mono">₹85,00,000</td>
+              <td class="text-center"><span class="pill pill-amber">25%</span></td>
+              <td class="text-center">1</td>
+            </tr>
+            <tr>
+              <td class="fw-600">Priya K.</td>
+              <td class="text-center">11</td>
+              <td class="text-center">3</td>
+              <td class="text-center">3</td>
+              <td class="text-right text-mono">₹45,00,000</td>
+              <td class="text-center"><span class="pill pill-amber">27%</span></td>
+              <td class="text-center">0</td>
+            </tr>
+            <tr>
+              <td class="fw-600">Deepak R.</td>
+              <td class="text-center">10</td>
+              <td class="text-center">2</td>
+              <td class="text-center">2</td>
+              <td class="text-right text-mono">₹68,00,000</td>
+              <td class="text-center"><span class="pill pill-red">20%</span></td>
+              <td class="text-center danger fw-600">3</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="grid-2 section">
+      <div class="chart-card">
+        <h3>Leads by owner (stage breakdown)</h3>
+        <div class="chart-wrap"><canvas id="c-owner"></canvas></div>
+        <div class="chart-legend">
+          <span class="legend-item"><span class="legend-dot" style="background:#CECBF6"></span>Identify/Contact</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#9FE1CB"></span>Explore/Proposal</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#FAC775"></span>Negotiation</span>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h3>Follow-up compliance (last 30 days)</h3>
+        <div class="chart-wrap"><canvas id="c-followup"></canvas></div>
+        <div class="chart-legend">
+          <span class="legend-item"><span class="legend-dot" style="background:#0E8A6A"></span>On time</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#E24B4A"></span>Missed</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+/* ── Tab switching ── */
+function showTab(idx) {
+  document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', i === idx));
+  document.querySelectorAll('.dashboard').forEach((d, i) => d.classList.toggle('active', i === idx));
+  if (!chartsInit[idx]) initCharts(idx);
+}
+
+/* ── Chart defaults ── */
+const gridC = 'rgba(0,0,0,0.05)';
+const tickC = '#9C9A92';
+const tickFont = { family: "'DM Sans', sans-serif", size: 11 };
+Chart.defaults.font.family = "'DM Sans', sans-serif";
+Chart.defaults.plugins.legend.display = false;
+
+const chartsInit = [false, false, false, false];
+
+function initCharts(tab) {
+  chartsInit[tab] = true;
+
+  if (tab === 0) {
+    new Chart(document.getElementById('c-funnel'), {
+      type: 'bar',
+      data: {
+        labels: ['Identify', 'Contact/Intro', 'Explore', 'Proposal', 'Negotiation', 'Secured'],
+        datasets: [{ data: [18, 10, 8, 5, 4, 2], backgroundColor: ['#CECBF6','#AFA9EC','#9FE1CB','#FAC775','#85B7EB','#97C459'], borderRadius: 4, barPercentage: 0.7 }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+        scales: { x: { grid: { color: gridC }, ticks: { color: tickC, font: tickFont } }, y: { grid: { display: false }, ticks: { color: tickC, font: tickFont } } }
+      }
+    });
+    new Chart(document.getElementById('c-program'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Incubation', 'Labs', 'CircleU', 'Non-program'],
+        datasets: [{ data: [1.8, 0.9, 1.0, 0.5], backgroundColor: ['#5C4FD6','#0E8A6A','#D85A30','#888880'], borderWidth: 0 }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, cutout: '55%' }
+    });
+  }
+
+  if (tab === 1) {
+    new Chart(document.getElementById('c-deal-prog'), {
+      type: 'bar',
+      data: {
+        labels: ['Incubation', 'Labs', 'CircleU', 'Non-program'],
+        datasets: [{ data: [1.2, 0.8, 0.5, 0.3], backgroundColor: ['#5C4FD6','#0E8A6A','#D85A30','#888880'], borderRadius: 4, barPercentage: 0.6 }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        scales: {
+          x: { grid: { display: false }, ticks: { color: tickC, font: tickFont } },
+          y: { grid: { color: gridC }, ticks: { color: tickC, font: tickFont, callback: v => '₹' + v + ' Cr' } }
+        }
+      }
+    });
+    new Chart(document.getElementById('c-funding'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Restricted', 'Unrestricted'],
+        datasets: [{ data: [2.1, 0.7], backgroundColor: ['#5C4FD6','#888880'], borderWidth: 0 }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, cutout: '55%' }
+    });
+  }
+
+  if (tab === 2) {
+    new Chart(document.getElementById('c-source'), {
+      type: 'bar',
+      data: {
+        labels: ['Board / Advisor', 'Internal Referral', 'Events', 'Cold Outreach', 'Website', 'Mobiliser', 'Social Media'],
+        datasets: [{ data: [14, 9, 7, 6, 5, 4, 2], backgroundColor: '#5C4FD6', borderRadius: 4, barPercentage: 0.65 }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+        scales: { x: { grid: { color: gridC }, ticks: { color: tickC, font: tickFont } }, y: { grid: { display: false }, ticks: { color: tickC, font: tickFont } } }
+      }
+    });
+    new Chart(document.getElementById('c-type'), {
+      type: 'doughnut',
+      data: {
+        labels: ['CSR', 'Foundation', 'Individual', 'Bi-lateral', 'Government', 'Institution'],
+        datasets: [{ data: [12, 8, 6, 4, 2, 2], backgroundColor: ['#5C4FD6','#0E8A6A','#D85A30','#3D7AE2','#6D9E22','#888880'], borderWidth: 0 }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, cutout: '55%' }
+    });
+    new Chart(document.getElementById('c-heat'), {
+      type: 'bar',
+      data: {
+        labels: ['Identify', 'Contact', 'Explore', 'Proposal', 'Negotiation'],
+        datasets: [
+          { label: 'Hot', data: [1, 2, 3, 3, 2], backgroundColor: '#E24B4A', borderRadius: 3 },
+          { label: 'Warm', data: [3, 4, 3, 1, 1], backgroundColor: '#EF9F27', borderRadius: 3 },
+          { label: 'Cold', data: [14, 4, 2, 1, 1], backgroundColor: '#85B7EB', borderRadius: 3 }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        scales: { x: { stacked: true, grid: { display: false }, ticks: { color: tickC, font: tickFont } }, y: { stacked: true, grid: { color: gridC }, ticks: { color: tickC, font: tickFont } } }
+      }
+    });
+    new Chart(document.getElementById('c-capacity'), {
+      type: 'bar',
+      data: {
+        labels: ['0–25 L', '25–50 L', '50 L–1 Cr', '1–2 Cr', '2 Cr+'],
+        datasets: [{ data: [8, 12, 14, 7, 6], backgroundColor: '#0E8A6A', borderRadius: 4, barPercentage: 0.65 }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        scales: { x: { grid: { display: false }, ticks: { color: tickC, font: tickFont } }, y: { grid: { color: gridC }, ticks: { color: tickC, font: tickFont } } }
+      }
+    });
+    new Chart(document.getElementById('c-fcra'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Local', 'FCRA'],
+        datasets: [{ data: [28, 6], backgroundColor: ['#0E8A6A','#3D7AE2'], borderWidth: 0 }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, cutout: '55%' }
+    });
+    new Chart(document.getElementById('c-interest'), {
+      type: 'bar',
+      data: {
+        labels: ['Incubation', 'Labs', 'CircleU', 'Non-program'],
+        datasets: [{ data: [18, 12, 10, 7], backgroundColor: '#D85A30', borderRadius: 4, barPercentage: 0.6 }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        scales: { x: { grid: { display: false }, ticks: { color: tickC, font: tickFont } }, y: { grid: { color: gridC }, ticks: { color: tickC, font: tickFont } } }
+      }
+    });
+  }
+
+  if (tab === 3) {
+    new Chart(document.getElementById('c-owner'), {
+      type: 'bar',
+      data: {
+        labels: ['Ananya', 'Rahul', 'Priya', 'Deepak'],
+        datasets: [
+          { label: 'Identify/Contact', data: [5, 4, 4, 5], backgroundColor: '#CECBF6', borderRadius: 3 },
+          { label: 'Explore/Proposal', data: [5, 5, 4, 3], backgroundColor: '#9FE1CB', borderRadius: 3 },
+          { label: 'Negotiation', data: [4, 3, 3, 2], backgroundColor: '#FAC775', borderRadius: 3 }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        scales: { x: { stacked: true, grid: { display: false }, ticks: { color: tickC, font: tickFont } }, y: { stacked: true, grid: { color: gridC }, ticks: { color: tickC, font: tickFont } } }
+      }
+    });
+    new Chart(document.getElementById('c-followup'), {
+      type: 'bar',
+      data: {
+        labels: ['Ananya', 'Rahul', 'Priya', 'Deepak'],
+        datasets: [
+          { label: 'On time', data: [18, 14, 16, 10], backgroundColor: '#0E8A6A', borderRadius: 3 },
+          { label: 'Missed', data: [0, 2, 0, 5], backgroundColor: '#E24B4A', borderRadius: 3 }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        scales: { x: { stacked: true, grid: { display: false }, ticks: { color: tickC, font: tickFont } }, y: { stacked: true, grid: { color: gridC }, ticks: { color: tickC, font: tickFont } } }
+      }
+    });
+  }
+}
+
+/* Init first tab */
+initCharts(0);
+</script>
+
+</body>
+</html>
