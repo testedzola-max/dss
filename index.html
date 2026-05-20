@@ -3,954 +3,2777 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Circle India — CRM Dashboards</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>DSS ImpactOS MIS — Phase 1 Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* ============================================================
+   ZOHO DESIGN TOKENS — extracted from live Zoho Creator + CRM
+   Covers all 6 Creator theme layout variants + CRM/Bigin.
+   Font: 'Inter' via Google Fonts (modern, clean, supported)
+   Last updated: March 2026
+   ============================================================ */
 
-  :root {
-    --bg: #F7F6F3;
-    --bg-card: #FFFFFF;
-    --bg-surface: #F0EFEC;
-    --bg-hover: #E8E7E3;
-    --text-primary: #1A1A1A;
-    --text-secondary: #6B6966;
-    --text-tertiary: #9C9A92;
-    --border: rgba(0,0,0,0.08);
-    --border-strong: rgba(0,0,0,0.14);
-    --accent: #3D5AFE;
-    --accent-light: #E8ECFF;
-    --green-bg: #E8F5E9; --green-text: #1B5E20;
-    --amber-bg: #FFF8E1; --amber-text: #E65100;
-    --red-bg: #FFEBEE; --red-text: #B71C1C;
-    --blue-bg: #E3F2FD; --blue-text: #0D47A1;
-    --purple-bg: #EDE7F6; --purple-text: #4527A0;
-    --teal-bg: #E0F2F1; --teal-text: #004D40;
-    --gray-bg: #ECEFF1; --gray-text: #37474F;
-    --radius: 10px;
-    --radius-lg: 14px;
-    --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
-    --shadow-md: 0 2px 8px rgba(0,0,0,0.06);
-    --font: 'DM Sans', -apple-system, sans-serif;
-    --mono: 'JetBrains Mono', monospace;
-  }
+/* ── GOOGLE FONT IMPORT ─────────────────────────────────────
+   Include this in every prototype <head>:
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+   ─────────────────────────────────────────────────────────── */
 
-  body {
-    font-family: var(--font);
-    background: var(--bg);
-    color: var(--text-primary);
-    line-height: 1.5;
-    -webkit-font-smoothing: antialiased;
-  }
+:root {
+  /* ── TYPOGRAPHY ─────────────────────────────────────────── */
+  --font-family:          'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-size-xs:         11px;
+  --font-size-sm:         12px;
+  --font-size-base:       13px;
+  --font-size-md:         14px;
+  --font-size-lg:         15px;
+  --font-size-xl:         16px;
+  --font-size-2xl:        18px;
+  --font-weight-normal:   400;
+  --font-weight-medium:   500;
+  --font-weight-semibold: 600;
+  --font-weight-bold:     700;
+  --line-height-tight:    1.3;
+  --line-height-normal:   1.5;
+  --line-height-relaxed:  1.6;
 
-  /* Header */
-  .header {
-    background: var(--bg-card);
-    border-bottom: 1px solid var(--border);
-    padding: 20px 32px 0;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-  .header-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 20px;
-  }
-  .logo-area {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-  }
-  .logo-mark {
-    width: 38px; height: 38px;
-    background: linear-gradient(135deg, #3D5AFE 0%, #7C4DFF 100%);
-    border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    color: #fff; font-weight: 700; font-size: 15px;
-    letter-spacing: -0.5px;
-  }
-  .logo-text h1 {
-    font-size: 17px; font-weight: 700; line-height: 1.2;
-    letter-spacing: -0.3px;
-  }
-  .logo-text span {
-    font-size: 12px; color: var(--text-tertiary); font-weight: 500;
-    letter-spacing: 0.5px; text-transform: uppercase;
-  }
-  .header-meta {
-    font-size: 13px; color: var(--text-secondary);
-    display: flex; align-items: center; gap: 16px;
-  }
-  .fy-badge {
-    background: var(--accent-light); color: var(--accent);
-    font-size: 12px; font-weight: 600; padding: 4px 12px;
-    border-radius: 6px;
-  }
+  /* ── ACCENT COLOUR PALETTE (from theme gallery swatches) ── */
+  /* Five accent colours, available across all layout themes   */
+  --accent-indigo:   #5051f9;  /* default — rgb(80,81,249)  */
+  --accent-pink:     #eb2257;  /* rgb(235,34,87)             */
+  --accent-green:    #0da04f;  /* rgb(13,160,79)             */
+  --accent-orange:   #f8670d;  /* rgb(248,103,13)            */
+  --accent-blue:     #0093ff;  /* rgb(0,147,255)             */
+  --accent-default:  var(--accent-indigo);
 
-  /* Tabs */
-  .tabs {
-    display: flex; gap: 0; overflow-x: auto;
-    scrollbar-width: none;
-  }
-  .tabs::-webkit-scrollbar { display: none; }
-  .tab {
-    padding: 10px 20px;
-    font-size: 13px; font-weight: 500;
-    color: var(--text-secondary);
-    border-bottom: 2px solid transparent;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: all 0.2s;
-    background: none; border-top: none; border-left: none; border-right: none;
-    font-family: var(--font);
-  }
-  .tab:hover { color: var(--text-primary); }
-  .tab.active {
-    color: var(--accent);
-    border-bottom-color: var(--accent);
-    font-weight: 600;
-  }
+  /* Dark theme accent variants */
+  --accent-dark-indigo: #5051f9;  /* same on dark bg #12132b  */
+  --accent-dark-gold:   #efcd6f;  /* rgb(239,205,111)         */
+  --accent-dark-green:  #0da04f;
+  --accent-dark-orange: #f8670d;
+  --accent-dark-blue:   #0093ff;
 
-  /* Main content */
-  .main { padding: 24px 32px 48px; max-width: 1280px; margin: 0 auto; }
-  .dashboard { display: none; animation: fadeIn 0.3s ease; }
-  .dashboard.active { display: block; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  /* ── SHARED SEMANTIC COLOURS ────────────────────────────── */
+  --color-success:  #33bb6e;
+  --color-warning:  #f8670d;
+  --color-danger:   #eb2257;
+  --color-info:     #0093ff;
+  --color-neutral:  #9ca3af;
 
-  /* Metric cards */
-  .metrics {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 14px;
-    margin-bottom: 24px;
-  }
-  .metric-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 18px 20px;
-    box-shadow: var(--shadow-sm);
-    transition: box-shadow 0.2s;
-  }
-  .metric-card:hover { box-shadow: var(--shadow-md); }
-  .metric-label {
-    font-size: 12px; color: var(--text-tertiary);
-    font-weight: 500; text-transform: uppercase;
-    letter-spacing: 0.4px; margin-bottom: 6px;
-  }
-  .metric-value {
-    font-size: 26px; font-weight: 700;
-    letter-spacing: -0.5px; line-height: 1.1;
-  }
-  .metric-value.danger { color: var(--red-text); }
-  .metric-value.warning { color: var(--amber-text); }
-  .metric-sub {
-    font-size: 12px; color: var(--text-tertiary); margin-top: 4px;
-  }
+  /* ── SHARED BADGE / STATUS COLOURS ─────────────────────── */
+  --badge-success-bg:    #d1fae5;   --badge-success-color:  #065f46;
+  --badge-warning-bg:    #fef3c7;   --badge-warning-color:  #92400e;
+  --badge-danger-bg:     #fee2e2;   --badge-danger-color:   #991b1b;
+  --badge-info-bg:       #dbeafe;   --badge-info-color:     #1e40af;
+  --badge-neutral-bg:    #f3f4f6;   --badge-neutral-color:  #4b5563;
+  --badge-radius:        10px;
+  --badge-padding:       2px 8px;
+  --badge-font-size:     11px;
+  --badge-font-weight:   500;
 
-  /* Section */
-  .section { margin-bottom: 24px; }
-  .section-title {
-    font-size: 14px; font-weight: 600; margin-bottom: 12px;
-    letter-spacing: -0.2px;
-  }
+  /* ── SHARED SPACING ─────────────────────────────────────── */
+  --space-2xs:  2px;
+  --space-xs:   4px;
+  --space-sm:   8px;
+  --space-md:   12px;
+  --space-lg:   16px;
+  --space-xl:   24px;
+  --space-2xl:  32px;
+  --space-3xl:  48px;
 
-  /* Grid */
-  .grid-2 {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px;
-  }
+  /* ── SHARED RADIUS ──────────────────────────────────────── */
+  --radius-xs:   2px;
+  --radius-sm:   4px;
+  --radius-md:   6px;
+  --radius-lg:   8px;
+  --radius-xl:   12px;
+  --radius-full: 9999px;
 
-  /* Chart cards */
-  .chart-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 20px;
-    box-shadow: var(--shadow-sm);
-  }
-  .chart-card h3 {
-    font-size: 13px; font-weight: 600; margin-bottom: 14px;
-    letter-spacing: -0.1px;
-  }
-  .chart-wrap {
-    position: relative;
-    width: 100%;
-    height: 240px;
-  }
-  .chart-legend {
-    display: flex; flex-wrap: wrap; gap: 14px;
-    margin-top: 12px; font-size: 12px; color: var(--text-secondary);
-  }
-  .legend-item {
-    display: flex; align-items: center; gap: 5px;
-  }
-  .legend-dot {
-    width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0;
-  }
+  /* ── SHARED SHADOW ──────────────────────────────────────── */
+  --shadow-xs:  0 1px 2px rgba(0,0,0,0.05);
+  --shadow-sm:  0 1px 4px rgba(0,0,0,0.08);
+  --shadow-md:  0 2px 8px rgba(0,0,0,0.10);
+  --shadow-lg:  0 4px 16px rgba(0,0,0,0.12);
 
-  /* Tables */
-  .table-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    box-shadow: var(--shadow-sm);
-  }
-  table {
-    width: 100%; border-collapse: collapse; font-size: 13px;
-  }
-  thead tr {
-    background: var(--bg-surface);
-  }
-  th {
-    padding: 10px 14px;
-    font-weight: 600; font-size: 11px;
-    color: var(--text-tertiary);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    text-align: left;
-  }
-  td {
-    padding: 11px 14px;
-    border-top: 1px solid var(--border);
-    color: var(--text-primary);
-  }
-  tr:hover td { background: var(--bg-surface); }
 
-  /* Pills / badges */
-  .pill {
-    display: inline-block;
-    padding: 3px 10px;
-    border-radius: 6px;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.2px;
-    white-space: nowrap;
-  }
-  .pill-green { background: var(--green-bg); color: var(--green-text); }
-  .pill-amber { background: var(--amber-bg); color: var(--amber-text); }
-  .pill-red { background: var(--red-bg); color: var(--red-text); }
-  .pill-blue { background: var(--blue-bg); color: var(--blue-text); }
-  .pill-purple { background: var(--purple-bg); color: var(--purple-text); }
-  .pill-teal { background: var(--teal-bg); color: var(--teal-text); }
-  .pill-gray { background: var(--gray-bg); color: var(--gray-text); }
+  /* ══════════════════════════════════════════════════════════
+     ZOHO CREATOR — BASE / DEFAULT TOKENS
+     (applies to all Creator layouts unless overridden by theme)
+     ══════════════════════════════════════════════════════════ */
 
-  /* Alert cards */
-  .alert-row {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-  }
-  .alert-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 14px 16px;
-    transition: box-shadow 0.2s;
-  }
-  .alert-card:hover { box-shadow: var(--shadow-md); }
-  .alert-card-top {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 4px;
-  }
-  .alert-card-top span:first-child {
-    font-size: 13px; font-weight: 600;
-  }
-  .alert-card p {
-    font-size: 12px; color: var(--text-secondary);
-  }
+  /* Page & canvas backgrounds */
+  --creator-bg:             #f2f4f5;
+  --creator-card-bg:        #ffffff;
+  --creator-card-shadow:    var(--shadow-md);
+  --creator-card-radius:    var(--radius-md);
 
-  /* Scorecard emphasis */
-  .text-right { text-align: right; }
-  .text-center { text-align: center; }
-  .fw-600 { font-weight: 600; }
-  .text-muted { color: var(--text-secondary); }
-  .text-mono { font-family: var(--mono); font-size: 12px; }
+  /* Form elements */
+  --creator-input-bg:           #f9f9fc;
+  --creator-input-border:       #e3e6ed;
+  --creator-input-border-focus: var(--accent-indigo);
+  --creator-input-radius:       var(--radius-sm);
+  --creator-input-padding:      8px 12px;
+  --creator-input-height:       34px;
+  --creator-input-font-size:    var(--font-size-base);
+  --creator-input-color:        #222326;
+  --creator-input-shadow:       0 2px 4px 0 rgba(220,232,251,0.6);
 
-  .check { color: var(--green-text); font-weight: 700; }
-  .cross { color: var(--red-text); font-weight: 700; }
+  /* Labels */
+  --creator-label-color:       #777777;
+  --creator-label-font-size:   var(--font-size-base);
+  --creator-label-font-weight: var(--font-weight-normal);
+  --creator-required-color:    #eb2257;
 
-  @media (max-width: 768px) {
-    .metrics { grid-template-columns: repeat(2, 1fr); }
-    .grid-2 { grid-template-columns: 1fr; }
-    .alert-row { grid-template-columns: 1fr; }
-    .header { padding: 16px 16px 0; }
-    .main { padding: 16px; }
-  }
+  /* Buttons */
+  --creator-btn-primary-bg:      #295bf9;
+  --creator-btn-primary-color:   #ffffff;
+  --creator-btn-primary-radius:  var(--radius-xs);
+  --creator-btn-primary-padding: 8px 20px;
+  --creator-btn-submit-bg:       #f05a8e;
+  --creator-btn-submit-color:    #ffffff;
+  --creator-btn-secondary-bg:    #ffffff;
+  --creator-btn-secondary-color: #444769;
+  --creator-btn-secondary-border: #d1d5db;
+
+  /* Semantic colours */
+  --creator-primary:          #3a69ff;
+  --creator-primary-light:    #e7edff;
+  --creator-text-primary:     #222326;
+  --creator-text-secondary:   #777a8d;
+  --creator-text-muted:       #c1c5e1;
+  --creator-text-label:       #777777;
+  --creator-border:           #e3e6ed;
+  --creator-divider:          #e6e6e6;
+  --creator-section-header-bg:    #f7f8fc;
+  --creator-section-header-color: #444769;
+
+  /* Top navbar (shared across all Creator layouts) */
+  --creator-navbar-bg:     #27274a;
+  --creator-navbar-height: 48px;
+  --creator-navbar-text:   #ffffff;
+
+  /* App logo circle */
+  --creator-logo-bg:     #e8315a;
+  --creator-logo-radius: var(--radius-md);
+  --creator-logo-size:   32px;
+
+
+  /* ══════════════════════════════════════════════════════════
+     THEME 1 — DARK EXPANDED LEFT NAV
+     Dark navy sidebar with grouped text items (INSIGHTS, QUICK ACTIONS sections).
+     Icon + label rows. Active item = blue pill. User avatar at bottom.
+     Use class: creator-theme-dark-leftnav
+     ══════════════════════════════════════════════════════════ */
+  --t1-sidebar-bg:          #1a1b2e;   /* very dark navy */
+  --t1-sidebar-width:       200px;
+  --t1-sidebar-text:        #b8bdd8;
+  --t1-sidebar-text-active: #ffffff;
+  --t1-sidebar-active-bg:   #5051f9;   /* solid indigo pill */
+  --t1-sidebar-active-radius: var(--radius-sm);
+  --t1-sidebar-hover-bg:    rgba(255,255,255,0.07);
+  --t1-sidebar-section-label: #6b7080;  /* muted section headers */
+  --t1-sidebar-section-font:  10px;
+  --t1-sidebar-section-weight: 600;
+  --t1-sidebar-icon-color:  #8892aa;
+  --t1-sidebar-icon-active: #ffffff;
+  --t1-sidebar-footer-bg:   rgba(0,0,0,0.2);
+  --t1-sidebar-footer-text: #9ca3af;
+
+
+  /* ══════════════════════════════════════════════════════════
+     THEME 2 — DARK ICON-ONLY SIDEBAR WITH FLYOUT
+     Very dark sidebar, icons only (no labels). Active = red/pink circle badge.
+     Hover reveals a dark flyout panel with sub-items.
+     Use class: creator-theme-dark-icon
+     ══════════════════════════════════════════════════════════ */
+  --t2-sidebar-bg:         #12132b;   /* darkest navy, rgb(18,19,43) */
+  --t2-sidebar-width:      52px;
+  --t2-sidebar-text:       #8892aa;
+  --t2-sidebar-active-bg:  #eb2257;   /* red/pink circle */
+  --t2-sidebar-active-radius: var(--radius-full);
+  --t2-sidebar-active-size: 36px;
+  --t2-sidebar-hover-bg:   rgba(255,255,255,0.06);
+  --t2-flyout-bg:          #1e1f35;   /* dark card flyout */
+  --t2-flyout-border:      rgba(255,255,255,0.1);
+  --t2-flyout-width:       200px;
+  --t2-flyout-text:        #e2e5f0;
+  --t2-flyout-active-text: #ffffff;
+  --t2-flyout-active-bg:   rgba(235,34,87,0.15);
+  --t2-flyout-shadow:      0 4px 20px rgba(0,0,0,0.4);
+  --t2-flyout-radius:      var(--radius-md);
+  --t2-logo-bg:            #eb2257;
+
+
+  /* ══════════════════════════════════════════════════════════
+     THEME 3 — GRADIENT HERO BANNER + ICON SIDEBAR
+     White icon sidebar (icons + label below). Top banner = purple→pink gradient
+     with user avatar and greeting. Tabs in banner for navigation.
+     Use class: creator-theme-banner
+     ══════════════════════════════════════════════════════════ */
+  --t3-sidebar-bg:          #ffffff;
+  --t3-sidebar-width:       72px;
+  --t3-sidebar-border:      #e8eaed;
+  --t3-sidebar-icon-color:  #9ca3af;
+  --t3-sidebar-icon-active: #7c3aed;  /* purple */
+  --t3-sidebar-active-bg:   rgba(124,58,237,0.1);
+  --t3-sidebar-active-radius: var(--radius-full);
+  --t3-sidebar-active-size:  40px;
+  --t3-sidebar-label-color: #6b7280;
+  --t3-sidebar-label-font:  10px;
+  --t3-banner-bg:           linear-gradient(135deg, #7c2ff2 0%, #e91e8c 100%);
+                            /* purple → pink */
+  --t3-banner-height:       80px;
+  --t3-banner-text:         #ffffff;
+  --t3-banner-greeting-size: var(--font-size-xl);
+  --t3-banner-greeting-weight: var(--font-weight-semibold);
+  --t3-banner-tab-bg:       rgba(255,255,255,0.2);
+  --t3-banner-tab-active-bg: rgba(255,255,255,0.9);
+  --t3-banner-tab-active-color: #7c2ff2;
+  --t3-banner-tab-radius:   var(--radius-full);
+  --t3-logo-bg:             #7c2ff2;
+
+
+  /* ══════════════════════════════════════════════════════════
+     THEME 4 — DARK TOP NAV + MINI ICON STRIP
+     Dark frame with horizontal text tabs across the top (with dropdown arrows).
+     Tiny icon-only strip on far left. Active tab = pink/red pill.
+     Use class: creator-theme-topnav-dark
+     ══════════════════════════════════════════════════════════ */
+  --t4-shell-bg:           #1a1b2e;  /* dark outer frame */
+  --t4-topnav-bg:          #1a1b2e;
+  --t4-topnav-height:      44px;
+  --t4-topnav-text:        #9ca3af;
+  --t4-topnav-text-active: #ffffff;
+  --t4-topnav-active-bg:   #eb2257;  /* pink active pill */
+  --t4-topnav-active-radius: var(--radius-full);
+  --t4-topnav-sep:         rgba(255,255,255,0.1);
+  --t4-topnav-dropdown-bg: #242538;
+  --t4-topnav-dropdown-shadow: var(--shadow-lg);
+  --t4-topnav-dropdown-text: #e2e5f0;
+  --t4-topnav-dropdown-hover: rgba(255,255,255,0.06);
+  --t4-icon-strip-bg:      #141527;  /* slightly darker strip */
+  --t4-icon-strip-width:   40px;
+  --t4-content-bg:         #242538;  /* slightly lighter dark content */
+  --t4-logo-bg:            #eb2257;
+
+
+  /* ══════════════════════════════════════════════════════════
+     THEME 5 — PURPLE TOP NAV + BOTTOM TAB BAR
+     Purple top bar with app name/breadcrumb. White content area with
+     purple side accent. Bottom tab bar = icons + labels.
+     Use class: creator-theme-bottomtab
+     ══════════════════════════════════════════════════════════ */
+  --t5-topbar-bg:           #5051f9;  /* solid indigo */
+  --t5-topbar-height:       48px;
+  --t5-topbar-text:         #ffffff;
+  --t5-topbar-breadcrumb-bg: rgba(255,255,255,0.15);
+  --t5-topbar-breadcrumb-radius: var(--radius-sm);
+  --t5-content-bg:          #f8f9ff;
+  --t5-content-border:      #e8eaff;
+  --t5-content-accent:      #5051f9;  /* purple left/right borders */
+  --t5-bottomtab-bg:        #ffffff;
+  --t5-bottomtab-height:    60px;
+  --t5-bottomtab-border:    #e8eaed;
+  --t5-bottomtab-text:      #9ca3af;
+  --t5-bottomtab-active-bg: #5051f9;
+  --t5-bottomtab-active-color: #ffffff;
+  --t5-bottomtab-active-radius: var(--radius-full);
+  --t5-bottomtab-icon-size: 20px;
+  --t5-bottomtab-label-font: 10px;
+  --t5-logo-bg:             #ffffff;
+  --t5-logo-color:          #5051f9;
+
+
+  /* ══════════════════════════════════════════════════════════
+     THEME 6 — PURPLE ICON SIDEBAR WITH FLYOUT (DEFAULT/ACTIVE)
+     Purple/indigo gradient sidebar. Icons + labels stacked.
+     Active item = pink/red highlight. Hover = dark card flyout submenu.
+     Use class: creator-theme-purple-icon (or default creator-shell)
+     ══════════════════════════════════════════════════════════ */
+  --t6-sidebar-bg:          linear-gradient(180deg, #3615a6 0%, #8817e1 100%);
+  --t6-sidebar-width:       80px;
+  --t6-sidebar-text:        rgba(255,255,255,0.75);
+  --t6-sidebar-text-active: #ffffff;
+  --t6-sidebar-active-bg:   rgba(255,255,255,0.18);
+  --t6-sidebar-active-radius: var(--radius-sm);
+  --t6-sidebar-icon-size:   22px;
+  --t6-sidebar-label-font:  10px;
+  --t6-sidebar-hover-bg:    rgba(255,255,255,0.1);
+  --t6-logo-bg:             #e8315a;
+  --t6-logo-badge:          #eb2257;   /* active item accent dot */
+  --t6-flyout-bg:           #1e1f35;
+  --t6-flyout-border:       rgba(255,255,255,0.08);
+  --t6-flyout-width:        180px;
+  --t6-flyout-text:         #e2e5f0;
+  --t6-flyout-active-bg:    rgba(235,34,87,0.2);
+  --t6-flyout-active-text:  #ffffff;
+  --t6-flyout-shadow:       0 4px 20px rgba(0,0,0,0.35);
+  --t6-flyout-radius:       var(--radius-md);
+
+  /* ── Keep backward-compatible aliases pointing to theme 6 ── */
+  --creator-sidebar-width:      var(--t6-sidebar-width);
+  --creator-sidebar-bg:         var(--t6-sidebar-bg);
+  --creator-sidebar-text:       var(--t6-sidebar-text);
+  --creator-sidebar-active-bg:  var(--t6-sidebar-active-bg);
+  --creator-sidebar-icon-size:  var(--t6-sidebar-icon-size);
+
+
+  /* ══════════════════════════════════════════════════════════
+     ZOHO CRM TOKENS
+     ══════════════════════════════════════════════════════════ */
+
+  /* Page background */
+  --crm-bg:              #f0f2f5;
+  --crm-card-bg:         #ffffff;
+  --crm-card-shadow:     var(--shadow-sm);
+
+  /* Left sidebar */
+  --crm-sidebar-bg:         #223458;
+  --crm-sidebar-width:      200px;
+  --crm-sidebar-text:       #b8c4d8;
+  --crm-sidebar-text-active: #ffffff;
+  --crm-sidebar-active-bg:   rgba(255,255,255,0.12);
+  --crm-sidebar-hover-bg:    rgba(255,255,255,0.07);
+  --crm-sidebar-accent:      #5464f2;
+
+  /* Top bar */
+  --crm-topbar-bg:     #313949;
+  --crm-topbar-height: 48px;
+  --crm-topbar-text:   #ffffff;
+
+  /* Body text */
+  --crm-text-primary:   #313949;
+  --crm-text-secondary: #6b7280;
+  --crm-text-muted:     #9ca3af;
+  --crm-text-label:     #6b7280;
+
+  /* Buttons */
+  --crm-btn-primary-bg:       #5464f2;
+  --crm-btn-primary-color:    #ffffff;
+  --crm-btn-primary-radius:   var(--radius-sm);
+  --crm-btn-secondary-bg:     #ffffff;
+  --crm-btn-secondary-border: #d1d5db;
+  --crm-btn-secondary-color:  #313949;
+  --crm-btn-danger-bg:        #f16363;
+  --crm-btn-padding:          7px 16px;
+
+  /* Pipeline / stage bar */
+  --crm-stage-bar-bg:       #eef1f9;
+  --crm-stage-active-bg:    #5464f2;
+  --crm-stage-active-color: #ffffff;
+  --crm-stage-inactive-color: #6b7280;
+  --crm-stage-won-color:    #16a34a;
+  --crm-stage-won-bg:       #d1fae5;
+  --crm-stage-lost-color:   #dc2626;
+  --crm-stage-lost-bg:      #fee2e2;
+  --crm-stage-height:       34px;
+
+  /* Field layout */
+  --crm-field-label-color:  #6b7280;
+  --crm-field-label-size:   var(--font-size-sm);
+  --crm-field-value-color:  #313949;
+  --crm-field-value-size:   var(--font-size-md);
+  --crm-section-title-color: #313949;
+  --crm-section-title-weight: var(--font-weight-semibold);
+  --crm-section-divider:    #e5e7eb;
+
+  /* Related list sidebar */
+  --crm-rellist-bg:         #ffffff;
+  --crm-rellist-border:     #e5e7eb;
+  --crm-rellist-width:      200px;
+  --crm-rellist-item-color: #5464f2;
+  --crm-rellist-item-hover: #f3f4ff;
+
+  /* Table/list view */
+  --crm-table-header-bg:  #f9fafb;
+  --crm-table-border:     #e5e7eb;
+  --crm-table-row-hover:  #f5f7ff;
+  --crm-link-color:       #5464f2;
+
+  /* Input */
+  --crm-input-border:        #d1d5db;
+  --crm-input-radius:        var(--radius-sm);
+  --crm-input-bg:            #ffffff;
+  --crm-input-padding:       7px 10px;
+  --crm-input-focus-border:  #5464f2;
+
+  /* Kanban */
+  --crm-kanban-col-bg:      #f3f4f6;
+  --crm-kanban-card-bg:     #ffffff;
+  --crm-kanban-card-shadow: 0 1px 3px rgba(0,0,0,0.10);
+  --crm-kanban-card-radius: var(--radius-md);
+  --crm-kanban-header-color: #374151;
+  --crm-kanban-col-width:    240px;
+}
+
+/* ============================================================
+   ZOHO COMPONENT LIBRARY v2 — Creator (6 themes) + CRM + Bigin
+   ─ Fixed font: Inter via Google Fonts
+   ─ Dynamic navigation: JS-powered dropdowns, active states, flyouts
+   ─ 6 Creator layout themes: dark-leftnav, dark-icon, banner,
+     topnav-dark, bottomtab, purple-icon (default)
+   ─ Full CRM: sidebar, topbar, detail view, kanban, list
+   Import after zoho-design-tokens.css
+   ============================================================ */
+
+/* ── RESET & BASE ──────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  color: #222326;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: var(--line-height-normal);
+}
+a { text-decoration: none; color: inherit; }
+ul, ol { list-style: none; }
+button { font-family: var(--font-family); }
+input, select, textarea { font-family: var(--font-family); }
+
+
+/* ══════════════════════════════════════════════════════════════
+   SHARED COMPONENTS
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── BUTTONS ────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 16px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity 0.15s, background 0.15s, box-shadow 0.15s;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+}
+.btn:hover { opacity: 0.88; }
+.btn:active { opacity: 0.75; }
+
+/* Creator button variants */
+.creator-btn-submit   { background: var(--creator-btn-submit-bg); color: #fff; }
+.creator-btn-primary  { background: var(--creator-btn-primary-bg); color: #fff; }
+.creator-btn-secondary {
+  background: var(--creator-btn-secondary-bg);
+  color: var(--creator-btn-secondary-color);
+  border-color: var(--creator-btn-secondary-border);
+}
+/* CRM button variants */
+.crm-btn-primary  { background: var(--crm-btn-primary-bg); color: #fff; border-radius: var(--crm-btn-primary-radius); }
+.crm-btn-secondary {
+  background: var(--crm-btn-secondary-bg);
+  color: var(--crm-btn-secondary-color);
+  border-color: var(--crm-btn-secondary-border);
+}
+.crm-btn-danger { background: var(--crm-btn-danger-bg); color: #fff; }
+.btn-sm { padding: 4px 12px; font-size: var(--font-size-xs); }
+.btn-lg { padding: 10px 22px; font-size: var(--font-size-md); }
+
+/* ── BADGES / TAGS ──────────────────────────────────────────── */
+.badge {
+  display: inline-block;
+  padding: var(--badge-padding);
+  border-radius: var(--badge-radius);
+  font-size: var(--badge-font-size);
+  font-weight: var(--badge-font-weight);
+  letter-spacing: 0.01em;
+}
+.badge-success { background: var(--badge-success-bg); color: var(--badge-success-color); }
+.badge-warning { background: var(--badge-warning-bg); color: var(--badge-warning-color); }
+.badge-danger  { background: var(--badge-danger-bg);  color: var(--badge-danger-color);  }
+.badge-info    { background: var(--badge-info-bg);    color: var(--badge-info-color);    }
+.badge-neutral { background: var(--badge-neutral-bg); color: var(--badge-neutral-color); }
+/* Legacy aliases */
+.badge-green  { background: #dcfce7; color: #15803d; }
+.badge-red    { background: #fee2e2; color: #b91c1c; }
+.badge-orange { background: #ffedd5; color: #c2410c; }
+.badge-blue   { background: #dbeafe; color: #1e40af; }
+.badge-purple { background: #ede9fe; color: #6d28d9; }
+.badge-grey   { background: #f3f4f6; color: #374151; }
+
+/* ── FORM INPUTS ─────────────────────────────────────────────── */
+.form-group { display: flex; flex-direction: column; gap: 5px; margin-bottom: 14px; }
+.form-label {
+  font-size: var(--font-size-sm);
+  color: var(--creator-label-color);
+  font-weight: var(--font-weight-normal);
+}
+.form-label .required, .required-star { color: var(--creator-required-color); }
+.form-control {
+  width: 100%;
+  height: var(--creator-input-height);
+  padding: var(--creator-input-padding);
+  background: var(--creator-input-bg);
+  border: 1px solid var(--creator-input-border);
+  border-radius: var(--creator-input-radius);
+  font-family: var(--font-family);
+  font-size: var(--creator-input-font-size);
+  color: var(--creator-input-color);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.form-control:focus {
+  border-color: var(--creator-input-border-focus);
+  box-shadow: 0 0 0 3px rgba(80,81,249,0.10);
+}
+.form-control::placeholder { color: #b0b7c9; font-size: var(--font-size-sm); }
+.form-control:disabled { background: #f3f4f6; color: #9ca3af; cursor: not-allowed; }
+textarea.form-control { height: auto; min-height: 76px; resize: vertical; }
+select.form-control {
+  cursor: pointer; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 30px;
+}
+.input-group { display: flex; }
+.input-prefix {
+  padding: 0 10px; background: #f3f4f6; border: 1px solid var(--creator-input-border);
+  border-right: none; border-radius: var(--creator-input-radius) 0 0 var(--creator-input-radius);
+  display: flex; align-items: center;
+  font-size: var(--font-size-sm); color: var(--creator-text-secondary);
+}
+.input-group .form-control {
+  border-radius: 0 var(--creator-input-radius) var(--creator-input-radius) 0;
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   CREATOR — TOP NAVBAR (shared across all Creator themes)
+   ══════════════════════════════════════════════════════════════ */
+.creator-navbar {
+  display: flex; align-items: center; gap: 12px;
+  height: var(--creator-navbar-height);
+  background: var(--creator-navbar-bg);
+  padding: 0 16px; flex-shrink: 0; z-index: 200;
+  position: relative;
+}
+.creator-navbar-logo {
+  width: 30px; height: 30px; border-radius: var(--radius-md);
+  background: var(--creator-logo-bg);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; color: #fff;
+  letter-spacing: 0.3px; flex-shrink: 0;
+}
+.creator-navbar-app {
+  display: flex; flex-direction: column; gap: 1px;
+}
+.creator-navbar-app-name {
+  font-size: var(--font-size-md); font-weight: var(--font-weight-semibold);
+  color: #ffffff; line-height: 1.2;
+}
+.creator-navbar-form-name {
+  font-size: var(--font-size-xs); color: rgba(255,255,255,0.55);
+}
+.creator-navbar-tabs {
+  display: flex; gap: 2px; margin-left: 16px;
+}
+.creator-navbar-tab {
+  display: flex; align-items: center; gap: 6px;
+  padding: 5px 14px; border-radius: 3px;
+  font-size: var(--font-size-sm); color: rgba(255,255,255,0.6);
+  cursor: pointer; transition: background 0.15s;
+  white-space: nowrap;
+}
+.creator-navbar-tab:hover { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.9); }
+.creator-navbar-tab.active { background: rgba(255,255,255,0.14); color: #fff; }
+.creator-navbar-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+.creator-navbar-icon-btn {
+  width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
+  color: rgba(255,255,255,0.7); cursor: pointer; border-radius: 4px;
+  font-size: 16px; transition: background 0.12s;
+}
+.creator-navbar-icon-btn:hover { background: rgba(255,255,255,0.1); }
+.creator-navbar-user {
+  display: flex; align-items: center; gap: 6px; cursor: pointer;
+  color: rgba(255,255,255,0.8); font-size: var(--font-size-sm);
+}
+.creator-navbar-avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 600; color: #fff;
+}
+.creator-navbar-share-btn {
+  padding: 5px 14px; background: #05b801; color: #fff;
+  border: none; border-radius: 3px;
+  font-size: var(--font-size-sm); font-weight: var(--font-weight-medium);
+  cursor: pointer; white-space: nowrap;
+}
+.creator-navbar-access-btn {
+  padding: 5px 14px; background: var(--creator-btn-primary-bg); color: #fff;
+  border: none; border-radius: 3px;
+  font-size: var(--font-size-sm); cursor: pointer;
+}
+
+/* Body area below navbar */
+.creator-body { display: flex; flex: 1; overflow: hidden; position: relative; }
+
+/* Main canvas */
+.creator-canvas {
+  flex: 1; overflow-y: auto;
+  background: var(--creator-bg);
+  padding: 20px;
+}
+.creator-canvas-inner {
+  max-width: 800px; margin: 0 auto;
+  background: #fff; border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md); overflow: hidden;
+}
+
+/* Form title bar */
+.creator-form-title {
+  padding: 14px 24px; background: #fff;
+  border-bottom: 1px solid var(--creator-border);
+  font-size: var(--font-size-lg); font-weight: var(--font-weight-medium);
+  color: var(--creator-text-primary);
+}
+.creator-form-body { padding: 20px 24px; }
+
+/* Section header inside form */
+.creator-section-header {
+  font-size: var(--font-size-xs); font-weight: var(--font-weight-semibold);
+  text-transform: uppercase; letter-spacing: 0.6px;
+  color: var(--creator-section-header-color);
+  background: var(--creator-section-header-bg);
+  padding: 8px 0; margin-bottom: 14px; margin-top: 8px;
+}
+
+/* Field rows (label-left layout, 160px label col) */
+.creator-field-row {
+  display: flex; align-items: flex-start; gap: 16px; margin-bottom: 14px;
+}
+.creator-field-label {
+  width: 160px; flex-shrink: 0; padding-top: 8px;
+  font-size: var(--font-size-sm); color: var(--creator-label-color);
+  text-align: right; line-height: 1.3;
+}
+.creator-field-control { flex: 1; }
+.creator-field-row.two-col .creator-field-control {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+}
+
+/* Form action buttons */
+.creator-form-actions {
+  display: flex; gap: 10px; padding-top: 16px; margin-top: 8px;
+  border-top: 1px solid var(--creator-border);
+}
+
+/* Creator table / list view */
+.creator-list-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 16px; background: #fff;
+  border-bottom: 1px solid var(--creator-border);
+}
+.creator-list-title {
+  font-size: var(--font-size-lg); font-weight: var(--font-weight-semibold);
+  color: var(--creator-text-primary);
+}
+.creator-list-actions { margin-left: auto; display: flex; gap: 8px; }
+.creator-table { width: 100%; border-collapse: collapse; background: #fff; }
+.creator-table th {
+  padding: 9px 14px; text-align: left;
+  font-size: var(--font-size-xs); font-weight: var(--font-weight-semibold);
+  color: var(--creator-text-secondary); text-transform: uppercase; letter-spacing: 0.5px;
+  background: var(--creator-section-header-bg);
+  border-bottom: 1px solid var(--creator-border); white-space: nowrap;
+}
+.creator-table td {
+  padding: 9px 14px; font-size: var(--font-size-sm);
+  color: var(--creator-text-primary);
+  border-bottom: 1px solid var(--creator-divider);
+}
+.creator-table tbody tr:hover { background: #f7f8ff; }
+.creator-table td a, .creator-link { color: var(--creator-primary); cursor: pointer; }
+.creator-table td a:hover { text-decoration: underline; }
+.creator-pagination {
+  padding: 10px 14px; font-size: var(--font-size-xs);
+  color: var(--creator-text-secondary); background: #fff;
+  border-top: 1px solid var(--creator-border);
+  display: flex; align-items: center; gap: 8px;
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   THEME 1 — DARK EXPANDED LEFT NAV
+   .creator-shell.theme-dark-leftnav
+   ══════════════════════════════════════════════════════════════ */
+.creator-shell { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+
+.theme-dark-leftnav .creator-sidebar {
+  width: var(--t1-sidebar-width);
+  background: var(--t1-sidebar-bg);
+  display: flex; flex-direction: column;
+  flex-shrink: 0; overflow-y: auto; overflow-x: hidden;
+}
+.theme-dark-leftnav .creator-sidebar-header {
+  padding: 14px 16px; display: flex; align-items: center; gap: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.theme-dark-leftnav .creator-sidebar-logo {
+  width: 32px; height: 32px; border-radius: var(--radius-md);
+  background: var(--creator-logo-bg);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; color: #fff; flex-shrink: 0;
+}
+.theme-dark-leftnav .creator-sidebar-appname {
+  font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold);
+  color: #ffffff;
+}
+.theme-dark-leftnav .creator-sidebar-section {
+  padding: 14px 14px 4px;
+  font-size: 10px; font-weight: var(--font-weight-semibold);
+  text-transform: uppercase; letter-spacing: 0.7px;
+  color: var(--t1-sidebar-section-label);
+}
+.theme-dark-leftnav .creator-nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 14px; cursor: pointer;
+  color: var(--t1-sidebar-text);
+  font-size: var(--font-size-sm); border-radius: 0;
+  transition: background 0.12s;
+  position: relative;
+}
+.theme-dark-leftnav .creator-nav-item:hover { background: var(--t1-sidebar-hover-bg); color: #fff; }
+.theme-dark-leftnav .creator-nav-item.active {
+  background: var(--t1-sidebar-active-bg);
+  color: var(--t1-sidebar-text-active);
+  border-radius: var(--t1-sidebar-active-radius);
+  margin: 0 8px;
+  padding-left: 8px;
+}
+.theme-dark-leftnav .creator-nav-item .nav-icon { font-size: 15px; width: 18px; text-align: center; color: var(--t1-sidebar-icon-color); flex-shrink: 0; }
+.theme-dark-leftnav .creator-nav-item.active .nav-icon { color: var(--t1-sidebar-icon-active); }
+.theme-dark-leftnav .creator-nav-item .nav-arrow { margin-left: auto; font-size: 10px; color: var(--t1-sidebar-icon-color); transition: transform 0.2s; }
+.theme-dark-leftnav .creator-nav-item.open .nav-arrow { transform: rotate(90deg); }
+.theme-dark-leftnav .creator-nav-submenu {
+  display: none; background: rgba(0,0,0,0.15);
+}
+.theme-dark-leftnav .creator-nav-item.open + .creator-nav-submenu { display: block; }
+.theme-dark-leftnav .creator-nav-submenu .creator-nav-item {
+  padding-left: 44px; font-size: var(--font-size-xs); color: var(--t1-sidebar-text);
+}
+.theme-dark-leftnav .creator-sidebar-footer {
+  margin-top: auto; padding: 12px 14px;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  background: var(--t1-sidebar-footer-bg);
+  display: flex; align-items: center; gap: 8px;
+}
+.theme-dark-leftnav .creator-sidebar-footer-avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 600; color: #fff; flex-shrink: 0;
+}
+.theme-dark-leftnav .creator-sidebar-footer-name {
+  font-size: var(--font-size-xs); color: var(--t1-sidebar-footer-text);
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   THEME 2 — DARK ICON-ONLY SIDEBAR WITH FLYOUT
+   .creator-shell.theme-dark-icon
+   ══════════════════════════════════════════════════════════════ */
+.theme-dark-icon .creator-sidebar {
+  width: var(--t2-sidebar-width);
+  background: var(--t2-sidebar-bg);
+  display: flex; flex-direction: column;
+  align-items: center; padding: 10px 0;
+  flex-shrink: 0; overflow: visible; position: relative; z-index: 100;
+}
+.theme-dark-icon .creator-sidebar-logo {
+  width: 32px; height: 32px; border-radius: var(--radius-md);
+  background: var(--t2-logo-bg);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; color: #fff;
+  margin-bottom: 12px; flex-shrink: 0;
+}
+.theme-dark-icon .creator-nav-icon-btn {
+  position: relative; width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--t2-sidebar-text); font-size: 18px;
+  cursor: pointer; border-radius: var(--radius-md);
+  margin-bottom: 4px; transition: background 0.12s;
+}
+.theme-dark-icon .creator-nav-icon-btn:hover { background: var(--t2-sidebar-hover-bg); color: #fff; }
+.theme-dark-icon .creator-nav-icon-btn.active {
+  background: var(--t2-sidebar-active-bg);
+  border-radius: var(--t2-sidebar-active-radius);
+  color: #fff;
+}
+/* Flyout panel — appears on hover/active */
+.theme-dark-icon .creator-flyout {
+  display: none; position: absolute;
+  left: calc(var(--t2-sidebar-width) + 4px); top: 0;
+  width: var(--t2-flyout-width);
+  background: var(--t2-flyout-bg);
+  border: 1px solid var(--t2-flyout-border);
+  border-radius: var(--t2-flyout-radius);
+  box-shadow: var(--t2-flyout-shadow);
+  z-index: 300; overflow: hidden;
+}
+.theme-dark-icon .creator-flyout.visible { display: block; }
+.theme-dark-icon .creator-flyout-header {
+  padding: 10px 14px;
+  font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold);
+  color: #fff; border-bottom: 1px solid var(--t2-flyout-border);
+}
+.theme-dark-icon .creator-flyout-item {
+  padding: 9px 14px; display: flex; align-items: center; gap: 8px;
+  font-size: var(--font-size-sm); color: var(--t2-flyout-text);
+  cursor: pointer; transition: background 0.10s;
+}
+.theme-dark-icon .creator-flyout-item:hover { background: rgba(255,255,255,0.05); }
+.theme-dark-icon .creator-flyout-item.active {
+  background: var(--t2-flyout-active-bg);
+  color: var(--t2-flyout-active-text);
+}
+.theme-dark-icon .creator-flyout-icon { font-size: 14px; width: 16px; text-align: center; }
+
+
+/* ══════════════════════════════════════════════════════════════
+   THEME 3 — GRADIENT HERO BANNER + ICON SIDEBAR
+   .creator-shell.theme-banner
+   ══════════════════════════════════════════════════════════════ */
+.theme-banner .creator-banner {
+  background: var(--t3-banner-bg);
+  height: var(--t3-banner-height);
+  display: flex; align-items: center;
+  padding: 0 20px; gap: 16px; flex-shrink: 0;
+}
+.theme-banner .creator-banner-avatar {
+  width: 48px; height: 48px; border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: #fff; flex-shrink: 0;
+  border: 2px solid rgba(255,255,255,0.4);
+}
+.theme-banner .creator-banner-greeting {
+  font-size: var(--t3-banner-greeting-size);
+  font-weight: var(--t3-banner-greeting-weight);
+  color: var(--t3-banner-text); flex: 1;
+}
+.theme-banner .creator-banner-tabs {
+  display: flex; gap: 6px;
+}
+.theme-banner .creator-banner-tab {
+  padding: 5px 14px; border-radius: var(--t3-banner-tab-radius);
+  font-size: var(--font-size-sm); font-weight: var(--font-weight-medium);
+  color: rgba(255,255,255,0.85); cursor: pointer;
+  background: var(--t3-banner-tab-bg);
+  transition: background 0.15s;
+}
+.theme-banner .creator-banner-tab.active {
+  background: var(--t3-banner-tab-active-bg);
+  color: var(--t3-banner-tab-active-color);
+}
+.theme-banner .creator-banner-icons {
+  display: flex; gap: 8px; color: rgba(255,255,255,0.8); font-size: 18px;
+}
+.theme-banner .creator-sidebar {
+  width: var(--t3-sidebar-width);
+  background: var(--t3-sidebar-bg);
+  border-right: 1px solid var(--t3-sidebar-border);
+  display: flex; flex-direction: column;
+  align-items: center; padding: 12px 0;
+  flex-shrink: 0; overflow-y: auto;
+}
+.theme-banner .creator-nav-icon-btn {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 4px; padding: 8px 0; width: 100%;
+  color: var(--t3-sidebar-icon-color); cursor: pointer;
+  transition: color 0.12s;
+}
+.theme-banner .creator-nav-icon-btn:hover { color: var(--t3-sidebar-icon-active); }
+.theme-banner .creator-nav-icon-btn.active { color: var(--t3-sidebar-icon-active); }
+.theme-banner .creator-nav-icon-btn.active .nav-icon-circle {
+  background: var(--t3-sidebar-active-bg);
+  border-radius: var(--t3-sidebar-active-radius);
+}
+.theme-banner .nav-icon-circle {
+  width: var(--t3-sidebar-active-size); height: var(--t3-sidebar-active-size);
+  display: flex; align-items: center; justify-content: center; font-size: 20px;
+}
+.theme-banner .nav-icon-label {
+  font-size: var(--t3-sidebar-label-font); color: var(--t3-sidebar-label-color);
+  text-align: center; line-height: 1.2; max-width: 60px;
+}
+.theme-banner .creator-nav-icon-btn.active .nav-icon-label { color: var(--t3-sidebar-icon-active); }
+
+
+/* ══════════════════════════════════════════════════════════════
+   THEME 4 — DARK TOP NAV + MINI ICON STRIP
+   .creator-shell.theme-topnav-dark
+   ══════════════════════════════════════════════════════════════ */
+.theme-topnav-dark { background: var(--t4-shell-bg); }
+.theme-topnav-dark .creator-topnav-bar {
+  height: var(--t4-topnav-height);
+  background: var(--t4-topnav-bg);
+  display: flex; align-items: center; gap: 4px;
+  padding: 0 12px; flex-shrink: 0;
+  border-bottom: 1px solid var(--t4-topnav-sep);
+}
+.theme-topnav-dark .creator-topnav-logo {
+  width: 28px; height: 28px; border-radius: var(--radius-sm);
+  background: var(--t4-logo-bg);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; color: #fff;
+  margin-right: 8px; flex-shrink: 0;
+}
+.theme-topnav-dark .creator-topnav-item {
+  display: flex; align-items: center; gap: 5px;
+  padding: 5px 12px; border-radius: var(--radius-full);
+  font-size: var(--font-size-sm); color: var(--t4-topnav-text);
+  cursor: pointer; white-space: nowrap;
+  transition: background 0.12s, color 0.12s;
+  position: relative;
+}
+.theme-topnav-dark .creator-topnav-item:hover { color: var(--t4-topnav-text-active); background: rgba(255,255,255,0.06); }
+.theme-topnav-dark .creator-topnav-item.active {
+  background: var(--t4-topnav-active-bg);
+  color: #fff; border-radius: var(--t4-topnav-active-radius);
+}
+.theme-topnav-dark .creator-topnav-arrow { font-size: 10px; color: rgba(255,255,255,0.4); }
+.theme-topnav-dark .creator-topnav-dropdown {
+  display: none; position: absolute; top: calc(100% + 4px); left: 0;
+  background: var(--t4-topnav-dropdown-bg);
+  border-radius: var(--radius-md); min-width: 180px;
+  box-shadow: var(--t4-topnav-dropdown-shadow); z-index: 200; overflow: hidden;
+}
+.theme-topnav-dark .creator-topnav-item.open .creator-topnav-dropdown { display: block; }
+.theme-topnav-dark .creator-topnav-dropdown-item {
+  padding: 9px 14px; font-size: var(--font-size-sm);
+  color: var(--t4-topnav-dropdown-text); cursor: pointer;
+  display: flex; align-items: center; gap: 8px;
+  transition: background 0.10s;
+}
+.theme-topnav-dark .creator-topnav-dropdown-item:hover { background: var(--t4-topnav-dropdown-hover); }
+.theme-topnav-dark .creator-topnav-right { margin-left: auto; display: flex; gap: 6px; align-items: center; color: rgba(255,255,255,0.6); font-size: 18px; }
+/* Main body: icon strip + content */
+.theme-topnav-dark .creator-body-area {
+  display: flex; flex: 1; overflow: hidden;
+}
+.theme-topnav-dark .creator-icon-strip {
+  width: var(--t4-icon-strip-width);
+  background: var(--t4-icon-strip-bg);
+  display: flex; flex-direction: column;
+  align-items: center; padding: 10px 0; gap: 4px; flex-shrink: 0;
+}
+.theme-topnav-dark .creator-strip-icon {
+  width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+  color: rgba(255,255,255,0.4); font-size: 16px; border-radius: var(--radius-sm);
+  cursor: pointer; transition: background 0.12s, color 0.12s;
+}
+.theme-topnav-dark .creator-strip-icon:hover { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.9); }
+.theme-topnav-dark .creator-strip-icon.active { color: var(--t4-topnav-active-bg); }
+.theme-topnav-dark .creator-content-area {
+  flex: 1; background: var(--t4-content-bg); overflow-y: auto;
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   THEME 5 — PURPLE TOP NAV + BOTTOM TAB BAR
+   .creator-shell.theme-bottomtab
+   ══════════════════════════════════════════════════════════════ */
+.theme-bottomtab { display: flex; flex-direction: column; }
+.theme-bottomtab .creator-topbar {
+  height: var(--t5-topbar-height); background: var(--t5-topbar-bg);
+  display: flex; align-items: center; gap: 12px;
+  padding: 0 16px; flex-shrink: 0;
+}
+.theme-bottomtab .creator-topbar-logo {
+  width: 30px; height: 30px; border-radius: var(--radius-md);
+  background: var(--t5-logo-bg);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 700; color: var(--t5-logo-color); flex-shrink: 0;
+}
+.theme-bottomtab .creator-topbar-appname {
+  font-size: var(--font-size-md); font-weight: var(--font-weight-semibold);
+  color: var(--t5-topbar-text);
+}
+.theme-bottomtab .creator-topbar-breadcrumb {
+  display: flex; align-items: center; gap: 6px;
+  padding: 4px 12px; background: var(--t5-topbar-breadcrumb-bg);
+  border-radius: var(--t5-topbar-breadcrumb-radius);
+  font-size: var(--font-size-sm); color: rgba(255,255,255,0.9);
+  cursor: pointer;
+}
+.theme-bottomtab .creator-topbar-breadcrumb-arrow { font-size: 10px; color: rgba(255,255,255,0.5); margin: 0 2px; }
+.theme-bottomtab .creator-topbar-right { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+.theme-bottomtab .creator-topbar-icon { color: rgba(255,255,255,0.75); font-size: 18px; cursor: pointer; }
+.theme-bottomtab .creator-topbar-avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 600; color: #fff;
+}
+.theme-bottomtab .creator-main-area {
+  flex: 1; overflow-y: auto;
+  background: var(--t5-content-bg);
+  border-left: 3px solid var(--t5-content-accent);
+  border-right: 3px solid var(--t5-content-accent);
+}
+.theme-bottomtab .creator-bottomtab-bar {
+  height: var(--t5-bottomtab-height);
+  background: var(--t5-bottomtab-bg);
+  border-top: 1px solid var(--t5-bottomtab-border);
+  display: flex; align-items: center; justify-content: space-around;
+  flex-shrink: 0; padding: 0 8px;
+}
+.theme-bottomtab .creator-tab-item {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 3px; cursor: pointer; flex: 1; padding: 6px 4px;
+  color: var(--t5-bottomtab-text); font-size: var(--t5-bottomtab-label-font);
+  transition: color 0.12s;
+}
+.theme-bottomtab .creator-tab-item .tab-icon-wrap {
+  width: 36px; height: 28px; display: flex; align-items: center; justify-content: center;
+  font-size: var(--t5-bottomtab-icon-size); border-radius: var(--t5-bottomtab-active-radius);
+  transition: background 0.15s, color 0.15s;
+}
+.theme-bottomtab .creator-tab-item.active .tab-icon-wrap {
+  background: var(--t5-bottomtab-active-bg); color: var(--t5-bottomtab-active-color);
+}
+.theme-bottomtab .creator-tab-item.active { color: var(--t5-bottomtab-active-bg); }
+
+
+/* ══════════════════════════════════════════════════════════════
+   THEME 6 — PURPLE ICON SIDEBAR WITH FLYOUT (DEFAULT)
+   .creator-shell  (no extra class needed — this is the base)
+   ══════════════════════════════════════════════════════════════ */
+.creator-app-nav {
+  width: var(--t6-sidebar-width);
+  background: var(--t6-sidebar-bg);
+  display: flex; flex-direction: column;
+  align-items: center; padding: 0 0 16px;
+  flex-shrink: 0; overflow-y: auto;
+  position: relative; z-index: 100;
+}
+.creator-app-logo {
+  width: 38px; height: 38px; border-radius: var(--radius-md);
+  background: var(--t6-logo-bg);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 700; color: #fff;
+  margin: 10px 0 8px;
+}
+.creator-app-nav-item {
+  display: flex; flex-direction: column; align-items: center;
+  width: 100%; padding: 9px 6px; gap: 4px; cursor: pointer;
+  color: var(--t6-sidebar-text); font-size: 10px; text-align: center;
+  transition: background 0.15s; position: relative;
+}
+.creator-app-nav-item:hover { background: var(--t6-sidebar-hover-bg); color: #fff; }
+.creator-app-nav-item.active { background: var(--t6-sidebar-active-bg); color: var(--t6-sidebar-text-active); }
+.creator-app-nav-item .nav-icon { font-size: 20px; line-height: 1; }
+.creator-app-nav-item .nav-badge {
+  position: absolute; top: 6px; right: 8px;
+  width: 8px; height: 8px; background: var(--t6-logo-badge); border-radius: 50%;
+}
+/* Flyout for theme 6 */
+.creator-nav-flyout {
+  display: none; position: absolute;
+  left: calc(var(--t6-sidebar-width) + 2px); top: 0;
+  width: var(--t6-flyout-width);
+  background: var(--t6-flyout-bg);
+  border: 1px solid var(--t6-flyout-border);
+  border-radius: var(--t6-flyout-radius);
+  box-shadow: var(--t6-flyout-shadow);
+  z-index: 300; overflow: hidden;
+}
+.creator-app-nav-item.flyout-open .creator-nav-flyout { display: block; }
+.creator-flyout-header {
+  padding: 10px 14px;
+  font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold);
+  color: #fff; border-bottom: 1px solid var(--t6-flyout-border);
+}
+.creator-flyout-item {
+  padding: 9px 14px; display: flex; align-items: center; gap: 8px;
+  font-size: var(--font-size-sm); color: var(--t6-flyout-text);
+  cursor: pointer; transition: background 0.10s;
+}
+.creator-flyout-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
+.creator-flyout-item.active {
+  background: var(--t6-flyout-active-bg); color: var(--t6-flyout-active-text);
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   ZOHO CRM LAYOUT
+   ══════════════════════════════════════════════════════════════ */
+.crm-shell {
+  display: flex; height: 100vh; overflow: hidden;
+  background: var(--crm-bg); font-family: var(--font-family);
+}
+
+/* Left sidebar */
+.crm-sidebar {
+  width: var(--crm-sidebar-width); flex-shrink: 0;
+  background: var(--crm-sidebar-bg);
+  display: flex; flex-direction: column;
+  overflow-y: auto; overflow-x: hidden;
+}
+.crm-sidebar-logo {
+  padding: 13px 16px; display: flex; align-items: center; gap: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.08); flex-shrink: 0;
+}
+.crm-sidebar-logo-icon {
+  width: 26px; height: 26px; border-radius: var(--radius-sm);
+  background: var(--crm-sidebar-accent);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; color: #fff;
+}
+.crm-sidebar-logo-text {
+  font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold); color: #fff;
+}
+.crm-sidebar-section-label {
+  font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px;
+  color: rgba(184,196,216,0.5); padding: 14px 16px 4px;
+  font-weight: var(--font-weight-medium);
+}
+.crm-sidebar-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 16px; cursor: pointer;
+  color: var(--crm-sidebar-text); font-size: var(--font-size-sm);
+  transition: background 0.12s;
+  border-left: 3px solid transparent;
+}
+.crm-sidebar-item:hover { background: var(--crm-sidebar-hover-bg); color: #fff; }
+.crm-sidebar-item.active {
+  background: var(--crm-sidebar-active-bg); color: #fff;
+  border-left-color: var(--crm-sidebar-accent);
+}
+.crm-sidebar-item .item-icon { font-size: 15px; width: 18px; text-align: center; }
+.crm-sidebar-item .item-count {
+  margin-left: auto; font-size: 11px;
+  background: rgba(255,255,255,0.15); color: #fff;
+  padding: 1px 6px; border-radius: 10px;
+}
+
+/* Main panel */
+.crm-main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+/* Top bar */
+.crm-topbar {
+  height: var(--crm-topbar-height); background: var(--crm-topbar-bg);
+  display: flex; align-items: center; padding: 0 16px; gap: 10px; flex-shrink: 0;
+}
+.crm-topbar-module {
+  font-size: var(--font-size-md); font-weight: var(--font-weight-semibold);
+  color: #fff; margin-right: auto;
+}
+.crm-topbar-search {
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.10); border-radius: var(--radius-sm);
+  padding: 5px 12px; color: rgba(255,255,255,0.55); font-size: var(--font-size-sm);
+  min-width: 180px;
+}
+.crm-topbar-search input {
+  background: transparent; border: none; outline: none;
+  color: rgba(255,255,255,0.9); font-size: var(--font-size-sm);
+  font-family: var(--font-family); width: 100%;
+}
+.crm-topbar-search input::placeholder { color: rgba(255,255,255,0.4); }
+.crm-topbar-icon { color: rgba(255,255,255,0.7); font-size: 18px; cursor: pointer; width: 30px; text-align: center; }
+.crm-topbar-avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--crm-sidebar-accent);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 600; color: #fff; cursor: pointer;
+}
+
+/* Module content area */
+.crm-content { flex: 1; overflow-y: auto; background: var(--crm-bg); }
+
+/* List view header */
+.crm-list-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 16px; background: #fff;
+  border-bottom: 1px solid var(--crm-table-border);
+}
+.crm-list-title {
+  font-size: var(--font-size-lg); font-weight: var(--font-weight-semibold);
+  color: var(--crm-text-primary);
+}
+.crm-list-count { font-size: var(--font-size-sm); color: var(--crm-text-muted); }
+.crm-list-actions { margin-left: auto; display: flex; gap: 8px; }
+.crm-view-tabs { display: flex; gap: 2px; }
+.crm-view-tab {
+  padding: 5px 8px; border-radius: 3px; cursor: pointer;
+  color: var(--crm-text-secondary); font-size: 15px; transition: background 0.12s;
+}
+.crm-view-tab.active { background: var(--crm-stage-bar-bg); color: var(--crm-btn-primary-bg); }
+
+/* Table */
+.crm-table { width: 100%; border-collapse: collapse; background: #fff; }
+.crm-table th {
+  padding: 9px 14px; text-align: left;
+  font-size: var(--font-size-xs); font-weight: var(--font-weight-semibold);
+  color: var(--crm-text-secondary); text-transform: uppercase; letter-spacing: 0.5px;
+  background: var(--crm-table-header-bg);
+  border-bottom: 1px solid var(--crm-table-border); white-space: nowrap;
+}
+.crm-table td {
+  padding: 9px 14px; font-size: var(--font-size-sm);
+  color: var(--crm-text-primary);
+  border-bottom: 1px solid var(--crm-table-border);
+}
+.crm-table tbody tr:hover { background: var(--crm-table-row-hover); }
+.crm-table td .crm-link, .crm-link { color: var(--crm-link-color); cursor: pointer; }
+.crm-table td .crm-link:hover { text-decoration: underline; }
+.crm-table-footer {
+  padding: 9px 14px; background: #fff;
+  border-top: 1px solid var(--crm-table-border);
+  font-size: var(--font-size-xs); color: var(--crm-text-muted);
+  display: flex; align-items: center; gap: 8px;
+}
+
+/* Kanban */
+.crm-kanban {
+  display: flex; gap: 12px; padding: 16px;
+  overflow-x: auto; align-items: flex-start; min-height: 100%;
+}
+.crm-kanban-col {
+  min-width: var(--crm-kanban-col-width); flex-shrink: 0;
+  background: var(--crm-kanban-col-bg); border-radius: var(--radius-md); overflow: hidden;
+}
+.crm-kanban-col-header {
+  padding: 10px 12px; font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold); color: var(--crm-kanban-header-color);
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+.crm-kanban-count {
+  background: rgba(0,0,0,0.08); color: var(--crm-text-secondary);
+  font-size: 11px; padding: 1px 7px; border-radius: 10px;
+}
+.crm-kanban-cards { padding: 8px; display: flex; flex-direction: column; gap: 8px; }
+.crm-kanban-card {
+  background: var(--crm-kanban-card-bg);
+  border-radius: var(--crm-kanban-card-radius);
+  box-shadow: var(--crm-kanban-card-shadow);
+  padding: 10px 12px; cursor: pointer;
+  transition: box-shadow 0.15s, transform 0.1s;
+}
+.crm-kanban-card:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.14); transform: translateY(-1px); }
+.crm-kanban-card-title {
+  font-size: var(--font-size-sm); font-weight: var(--font-weight-medium);
+  color: var(--crm-text-primary); margin-bottom: 3px;
+}
+.crm-kanban-card-sub { font-size: var(--font-size-xs); color: var(--crm-text-secondary); margin-bottom: 8px; }
+.crm-kanban-card-footer { display: flex; justify-content: space-between; align-items: center; }
+.crm-kanban-card-amount { font-size: var(--font-size-xs); font-weight: var(--font-weight-semibold); color: var(--crm-text-primary); }
+.crm-kanban-card-owner {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: #dbeafe; color: #1e40af;
+  font-size: 10px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* CRM Record detail */
+.crm-detail-shell { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.crm-detail-header {
+  background: #fff; padding: 12px 20px;
+  border-bottom: 1px solid var(--crm-section-divider);
+  display: flex; align-items: center; gap: 12px; flex-shrink: 0;
+}
+.crm-detail-back { color: var(--crm-text-secondary); font-size: 18px; cursor: pointer; }
+.crm-detail-title {
+  font-size: var(--font-size-xl); font-weight: var(--font-weight-semibold);
+  color: var(--crm-text-primary); flex: 1;
+}
+.crm-detail-actions { display: flex; gap: 8px; }
+
+/* Pipeline stage bar */
+.crm-stage-bar-wrap {
+  background: #fff; padding: 10px 20px 0;
+  border-bottom: 1px solid var(--crm-section-divider); flex-shrink: 0;
+}
+.crm-stage-bar { display: flex; gap: 3px; padding-bottom: 10px; overflow-x: auto; }
+.crm-stage-pill {
+  padding: 5px 14px; font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium); white-space: nowrap;
+  cursor: pointer; border-radius: 3px;
+  color: var(--crm-text-secondary); background: var(--crm-stage-bar-bg);
+  transition: background 0.12s;
+}
+.crm-stage-pill:hover { background: #e2e6f8; }
+.crm-stage-pill.active {
+  background: var(--crm-stage-active-bg); color: #fff;
+}
+.crm-stage-pill.won { background: var(--crm-stage-won-bg); color: var(--crm-stage-won-color); }
+.crm-stage-pill.lost { background: var(--crm-stage-lost-bg); color: var(--crm-stage-lost-color); }
+.crm-stage-arrow { color: #d1d5db; font-size: 11px; display: flex; align-items: center; }
+
+/* Detail tabs */
+.crm-detail-tabs {
+  display: flex; padding: 0 20px;
+  background: #fff; border-bottom: 1px solid var(--crm-section-divider); flex-shrink: 0;
+}
+.crm-detail-tab {
+  padding: 10px 16px; font-size: var(--font-size-sm);
+  color: var(--crm-text-secondary); cursor: pointer;
+  border-bottom: 2px solid transparent; transition: color 0.12s;
+}
+.crm-detail-tab:hover { color: var(--crm-text-primary); }
+.crm-detail-tab.active {
+  color: var(--crm-btn-primary-bg); border-bottom-color: var(--crm-btn-primary-bg);
+  font-weight: var(--font-weight-medium);
+}
+
+/* Detail body: related list + main */
+.crm-detail-body { display: flex; flex: 1; overflow: hidden; }
+.crm-related-list {
+  width: var(--crm-rellist-width); flex-shrink: 0;
+  background: #fff; border-right: 1px solid var(--crm-section-divider);
+  overflow-y: auto; padding: 10px 0;
+}
+.crm-related-section-title {
+  font-size: 10px; text-transform: uppercase; letter-spacing: 0.7px;
+  color: var(--crm-text-muted); padding: 8px 14px 4px;
+  font-weight: var(--font-weight-semibold);
+}
+.crm-related-item {
+  padding: 7px 14px; font-size: var(--font-size-sm);
+  color: var(--crm-rellist-item-color); cursor: pointer;
+  transition: background 0.10s; display: flex; align-items: center; justify-content: space-between;
+}
+.crm-related-item:hover { background: var(--crm-rellist-item-hover); }
+.crm-related-item.active { background: var(--crm-rellist-item-hover); font-weight: var(--font-weight-medium); }
+.crm-rel-count {
+  font-size: 11px; background: var(--crm-stage-bar-bg);
+  color: var(--crm-text-secondary); padding: 1px 6px; border-radius: 10px;
+}
+.crm-detail-overview { flex: 1; overflow-y: auto; padding: 14px 18px; }
+.crm-section {
+  background: #fff; border-radius: var(--radius-md);
+  border: 1px solid var(--crm-section-divider); margin-bottom: 12px;
+}
+.crm-section-header {
+  padding: 10px 16px; font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold); color: var(--crm-section-title-color);
+  border-bottom: 1px solid var(--crm-section-divider);
+  background: var(--crm-table-header-bg);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.crm-section-body { padding: 12px 16px; }
+.crm-kv-grid {
+  display: grid; grid-template-columns: minmax(140px,180px) 1fr; gap: 10px 20px;
+}
+.crm-kv-label {
+  font-size: var(--font-size-xs); color: var(--crm-field-label-color);
+  padding-top: 1px; text-align: right;
+}
+.crm-kv-value { font-size: var(--font-size-sm); color: var(--crm-field-value-color); }
+.crm-kv-value.link { color: var(--crm-link-color); cursor: pointer; }
+.crm-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--crm-stage-bar-bg);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 600; color: var(--crm-btn-primary-bg);
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   DYNAMIC NAVIGATION — JavaScript hooks
+   Add data-nav="true" to nav containers to enable auto-behaviour.
+   The inline <script> in each prototype handles interactions.
+   ══════════════════════════════════════════════════════════════ */
+
+/* Active state transitions */
+.creator-app-nav-item,
+.crm-sidebar-item,
+.creator-nav-item,
+.creator-nav-icon-btn,
+.creator-topnav-item,
+.creator-tab-item,
+.creator-banner-tab {
+  transition: background 0.15s, color 0.15s, opacity 0.15s;
+}
+
+/* Flyout show/hide via JS class toggle */
+.creator-nav-flyout,
+.creator-topnav-dropdown,
+.theme-dark-icon .creator-flyout { transition: opacity 0.15s; }
+
+/* Submenu expand/collapse */
+.creator-nav-submenu { overflow: hidden; transition: max-height 0.25s ease; }
+.creator-nav-submenu.collapsed { max-height: 0 !important; }
+.creator-nav-submenu.expanded { max-height: 500px; }
+
+/* Highlight pulse on newly activated items */
+@keyframes nav-activate {
+  0% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+.nav-just-activated { animation: nav-activate 0.2s ease; }
+
+
+/* ══════════════════════════════════════════════════════════════
+   UTILITY CLASSES
+   ══════════════════════════════════════════════════════════════ */
+.flex          { display: flex; }
+.flex-col      { flex-direction: column; }
+.items-center  { align-items: center; }
+.justify-between { justify-content: space-between; }
+.gap-xs        { gap: var(--space-xs); }
+.gap-sm        { gap: var(--space-sm); }
+.gap-md        { gap: var(--space-md); }
+.gap-lg        { gap: var(--space-lg); }
+.ml-auto       { margin-left: auto; }
+.mr-auto       { margin-right: auto; }
+.mt-sm         { margin-top: var(--space-sm); }
+.mt-md         { margin-top: var(--space-md); }
+.mb-md         { margin-bottom: var(--space-md); }
+.p-md          { padding: var(--space-md); }
+.text-xs       { font-size: var(--font-size-xs); }
+.text-sm       { font-size: var(--font-size-sm); }
+.text-md       { font-size: var(--font-size-md); }
+.text-muted    { color: var(--crm-text-muted); }
+.text-label    { color: var(--crm-field-label-color); }
+.text-link     { color: var(--crm-link-color); cursor: pointer; }
+.font-medium   { font-weight: var(--font-weight-medium); }
+.font-semibold { font-weight: var(--font-weight-semibold); }
+.w-full        { width: 100%; }
+.truncate      { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.divider       { border: none; border-top: 1px solid var(--crm-section-divider); margin: 12px 0; }
+.card          { background: #fff; border-radius: var(--radius-md); border: 1px solid var(--crm-section-divider); }
+.sr-only       { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+
+
+/* ══════════════════════════════════════════════════════════════
+   STANDARD DYNAMIC NAV SCRIPT (embed in every prototype)
+   ══════════════════════════════════════════════════════════════
+   Paste this <script> block just before </body> in every prototype:
+
+<script>
+(function() {
+  // 1. Sidebar / nav item click → toggle active
+  document.querySelectorAll(
+    '.creator-app-nav-item, .creator-nav-item, .crm-sidebar-item, ' +
+    '.creator-nav-icon-btn, .creator-tab-item, .creator-banner-tab, .creator-topnav-item'
+  ).forEach(function(item) {
+    item.addEventListener('click', function(e) {
+      // Find sibling items in same container and remove active
+      var parent = item.parentElement;
+      parent.querySelectorAll(':scope > .creator-app-nav-item, :scope > .creator-nav-item, ' +
+        ':scope > .crm-sidebar-item, :scope > .creator-tab-item, :scope > .creator-topnav-item,' +
+        ':scope > .creator-banner-tab').forEach(function(sib) {
+        sib.classList.remove('active');
+      });
+      item.classList.add('active');
+
+      // If has submenu arrow, toggle open
+      if (item.querySelector('.nav-arrow')) {
+        item.classList.toggle('open');
+        var sub = item.nextElementSibling;
+        if (sub && sub.classList.contains('creator-nav-submenu')) {
+          sub.classList.toggle('collapsed');
+          sub.classList.toggle('expanded');
+        }
+      }
+
+      // If has flyout, toggle flyout-open
+      if (item.querySelector('.creator-nav-flyout, .creator-flyout')) {
+        item.classList.toggle('flyout-open');
+      }
+    });
+  });
+
+  // 2. Top nav dropdowns
+  document.querySelectorAll('.creator-topnav-item').forEach(function(item) {
+    item.addEventListener('click', function() {
+      var wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.creator-topnav-item.open').forEach(function(o) { o.classList.remove('open'); });
+      if (!wasOpen) item.classList.add('open');
+    });
+  });
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.creator-topnav-item')) {
+      document.querySelectorAll('.creator-topnav-item.open').forEach(function(o) { o.classList.remove('open'); });
+    }
+  });
+
+  // 3. Dark icon sidebar flyout — show on click
+  document.querySelectorAll('.theme-dark-icon .creator-nav-icon-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var flyout = document.querySelector('.theme-dark-icon .creator-flyout');
+      if (flyout) flyout.classList.toggle('visible');
+    });
+  });
+
+  // 4. CRM stage pills
+  document.querySelectorAll('.crm-stage-pill').forEach(function(pill) {
+    pill.addEventListener('click', function() {
+      document.querySelectorAll('.crm-stage-pill').forEach(function(p) { p.classList.remove('active'); });
+      pill.classList.add('active');
+    });
+  });
+
+  // 5. CRM detail tabs
+  document.querySelectorAll('.crm-detail-tab').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('.crm-detail-tab').forEach(function(t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+    });
+  });
+})();
+</script>
+   ══════════════════════════════════════════════════════════════ */
+
+
+/* ── Prototype switcher bar ── */
+body { margin:0; background:#1a1b2e; }
+.prototype-switcher {
+  display:flex; align-items:center; gap:0;
+  background:#12132b; padding:0 16px;
+  border-bottom:2px solid #5051f9; flex-shrink:0;
+  overflow-x:auto;
+}
+.switcher-brand {
+  font-size:12px; font-weight:700; color:#eb2257;
+  padding:10px 16px 10px 0; border-right:1px solid rgba(255,255,255,0.1);
+  margin-right:12px; white-space:nowrap; flex-shrink:0;
+  letter-spacing:0.5px;
+}
+.screen-tab {
+  padding:10px 16px; font-size:12px; font-weight:500;
+  color:rgba(255,255,255,0.5); cursor:pointer; white-space:nowrap;
+  border-bottom:2px solid transparent; margin-bottom:-2px;
+  transition:color 0.15s;
+}
+.screen-tab:hover { color:rgba(255,255,255,0.85); }
+.screen-tab.active { color:#fff; border-bottom-color:#5051f9; }
+.screen { display:none; flex-direction:column; height:calc(100vh - 42px); }
+
+/* Dashboard cards */
+.dash-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:16px; }
+.dash-grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:16px; }
+.kpi-card {
+  background:#fff; border-radius:8px; padding:16px;
+  border:1px solid #e5e7eb; box-shadow:0 1px 4px rgba(0,0,0,0.06);
+}
+.kpi-label { font-size:11px; color:#6b7280; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:6px; }
+.kpi-value { font-size:26px; font-weight:700; color:#1f2937; line-height:1; margin-bottom:4px; }
+.kpi-sub { font-size:11px; color:#9ca3af; }
+.kpi-trend-up { color:#059669; font-size:11px; font-weight:600; }
+.kpi-trend-dn { color:#dc2626; font-size:11px; font-weight:600; }
+.dash-section-title { font-size:13px; font-weight:600; color:#374151; margin-bottom:10px; }
+.alert-card {
+  background:#fff; border-radius:8px; border-left:4px solid #dc2626;
+  padding:12px 14px; margin-bottom:8px; box-shadow:0 1px 3px rgba(0,0,0,0.06);
+  display:flex; align-items:center; gap:12px;
+}
+.alert-card.amber { border-left-color:#d97706; }
+.alert-card.blue  { border-left-color:#2563eb; }
+.alert-card.green { border-left-color:#059669; }
+.alert-icon { font-size:20px; flex-shrink:0; }
+.alert-body { flex:1; }
+.alert-title { font-size:12px; font-weight:600; color:#1f2937; }
+.alert-desc  { font-size:11px; color:#6b7280; margin-top:2px; }
+.alert-count { font-size:20px; font-weight:700; }
+.alert-count.red { color:#dc2626; }
+.alert-count.amber { color:#d97706; }
+.alert-count.blue { color:#2563eb; }
+.alert-count.green { color:#059669; }
+.prog-bar-wrap { background:#e5e7eb; border-radius:99px; height:8px; overflow:hidden; margin-top:4px; }
+.prog-bar { height:8px; border-radius:99px; background:#5051f9; }
+.prog-bar.green { background:#059669; }
+.prog-bar.amber { background:#d97706; }
+.prog-bar.red   { background:#dc2626; }
+.level-badge { display:inline-block; padding:2px 8px; border-radius:10px; font-size:10px; font-weight:600; }
+.level-pl  { background:#fee2e2; color:#991b1b; }
+.level-l1  { background:#fef3c7; color:#92400e; }
+.level-l2  { background:#fef3c7; color:#78350f; }
+.level-l3  { background:#e0f2fe; color:#0369a1; }
+.level-l4  { background:#dbeafe; color:#1e40af; }
+.level-l5  { background:#ede9fe; color:#5b21b6; }
+.level-l6  { background:#d1fae5; color:#065f46; }
+.level-l7  { background:#bbf7d0; color:#14532d; }
+.heatmap-wrap { display:grid; grid-template-columns:repeat(8,1fr); gap:4px; }
+.heatmap-cell { border-radius:4px; padding:6px 4px; text-align:center; font-size:10px; font-weight:600; color:#fff; }
+.chart-bar-wrap { display:flex; gap:8px; align-items:flex-end; height:100px; margin-bottom:4px; }
+.chart-bar { flex:1; border-radius:4px 4px 0 0; background:#5051f9; min-width:20px; transition:opacity 0.15s; }
+.chart-bar:hover { opacity:0.8; }
+.chart-labels { display:flex; gap:8px; }
+.chart-label { flex:1; text-align:center; font-size:10px; color:#6b7280; }
+.canvas-pad { padding:16px; overflow-y:auto; flex:1; background:#f2f4f5; }
+.two-col-dash { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.section-card { background:#fff; border-radius:8px; border:1px solid #e5e7eb; padding:14px; margin-bottom:12px; }
+/* attendance table compact */
+.att-table { width:100%; border-collapse:collapse; font-size:12px; }
+.att-table th { background:#f9fafb; padding:7px 10px; text-align:left; font-size:11px; font-weight:600; color:#6b7280; border-bottom:1px solid #e5e7eb; }
+.att-table td { padding:7px 10px; border-bottom:1px solid #f3f4f6; color:#374151; }
+.att-table tr:hover td { background:#f9fafb; }
+
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="header-top">
-    <div class="logo-area">
-      <div class="logo-mark">TCI</div>
-      <div class="logo-text">
-        <h1>The Circle India</h1>
-        <span>Fundraising CRM</span>
-      </div>
-    </div>
-    <div class="header-meta">
-      <span class="fy-badge">FY 2025–26</span>
-      <span>Last updated: 01 Apr 2026</span>
-    </div>
-  </div>
-  <div class="tabs">
-    <button class="tab active" onclick="showTab(0)">Pipeline overview</button>
-    <button class="tab" onclick="showTab(1)">Deal management</button>
-    <button class="tab" onclick="showTab(2)">Donor engagement</button>
-    <button class="tab" onclick="showTab(3)">Team performance</button>
-  </div>
+<!-- ══ SWITCHER BAR ══════════════════════════════════════════ -->
+<div class="prototype-switcher">
+  <div class="switcher-brand">DSS · ImpactOS Phase 1</div>
+  <div class="screen-tab active" data-screen="screen-student-form">Student Registration</div>
+  <div class="screen-tab" data-screen="screen-student-list">Student List</div>
+  <div class="screen-tab" data-screen="screen-attendance">Attendance Entry</div>
+  <div class="screen-tab" data-screen="screen-fln-assess">FLN Assessment</div>
+  <div class="screen-tab" data-screen="screen-teacher-dash">Teacher Dashboard</div>
+  <div class="screen-tab" data-screen="screen-coord-dash">Coordinator Dashboard</div>
+  <div class="screen-tab" data-screen="screen-pm-dash">Programme Manager Dashboard</div>
 </div>
 
-<div class="main">
-
-  <!-- ============ DASHBOARD 1: Pipeline Overview ============ -->
-  <div class="dashboard active" id="dash-0">
-    <div class="metrics">
-      <div class="metric-card">
-        <div class="metric-label">Active leads</div>
-        <div class="metric-value">47</div>
-        <div class="metric-sub">+6 this month</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-label">Pipeline value</div>
-        <div class="metric-value">₹4.2 Cr</div>
-        <div class="metric-sub">Across all stages</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-label">Conversion rate</div>
-        <div class="metric-value">18%</div>
-        <div class="metric-sub">Lead → Deal</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-label">Deals won (FY)</div>
-        <div class="metric-value">12</div>
-        <div class="metric-sub">₹2.8 Cr secured</div>
+<!-- ══════════════════════════════════════════════════════════
+     SCREEN 1 — Student Registration Form
+     ══════════════════════════════════════════════════════════ -->
+<div id="screen-student-form" class="screen">
+<div class="creator-shell theme-dark-leftnav" style="flex:1;height:100%;">
+  <nav class="creator-navbar">
+    <div class="creator-navbar-logo">DS</div>
+    <div class="creator-navbar-app">
+      <div class="creator-navbar-app-name">Doorstep School MIS</div>
+      <div class="creator-navbar-form-name">Student Registration</div>
+    </div>
+    <div class="creator-navbar-right">
+      <div class="creator-navbar-icon-btn">🔔</div>
+      <div class="creator-navbar-user">
+        <div class="creator-navbar-avatar">RS</div>
+        Rajeshree S.
       </div>
     </div>
+  </nav>
+  <div class="creator-body" style="flex:1;overflow:hidden;">
+    <nav class="creator-sidebar">
+      <div class="creator-sidebar-header">
+        <div class="creator-sidebar-logo">DS</div>
+        <div class="creator-sidebar-appname">DSS MIS</div>
+      </div>
+      <div class="creator-sidebar-section">RECORDS</div>
+      <div data-screen="screen-student-list" style="cursor:pointer;" class="creator-nav-item active"><span class="nav-icon">👤</span> Students</div>
+      <div data-screen="screen-student-list" style="cursor:pointer;" class="creator-nav-item"><span class="nav-icon">🏫</span> Schools</div>
+      <div data-screen="screen-student-list" style="cursor:pointer;" class="creator-nav-item"><span class="nav-icon">📚</span> Classes</div>
+      <div data-screen="screen-student-list" style="cursor:pointer;" class="creator-nav-item"><span class="nav-icon">👩‍🏫</span> Teachers</div>
+      <div class="creator-sidebar-section">OPERATIONS</div>
+      <div data-screen="screen-attendance" style="cursor:pointer;" class="creator-nav-item"><span class="nav-icon">✅</span> Attendance</div>
+      <div data-screen="screen-fln-assess" style="cursor:pointer;" class="creator-nav-item"><span class="nav-icon">📊</span> Assessments</div>
+      <div data-screen="screen-student-list" style="cursor:pointer;" class="creator-nav-item"><span class="nav-icon">🚪</span> Exit / Dropout</div>
+      <div class="creator-sidebar-section">REPORTING</div>
+      <div data-screen="screen-pm-dash" style="cursor:pointer;" class="creator-nav-item"><span class="nav-icon">📈</span> Reports</div>
+      <div data-screen="screen-pm-dash" style="cursor:pointer;" class="creator-nav-item"><span class="nav-icon">💰</span> Donors</div>
+      <div class="creator-sidebar-footer">
+        <div class="creator-sidebar-footer-avatar">RS</div>
+        <div class="creator-sidebar-footer-name">Rajeshree S. · Teacher</div>
+      </div>
+    </nav>
+    <main class="creator-canvas">
+      <div class="creator-canvas-inner">
+        <div class="creator-form-title">New Student Registration</div>
+        <div class="creator-form-body">
 
-    <div class="grid-2 section">
-      <div class="chart-card">
-        <h3>Lead funnel by stage</h3>
-        <div class="chart-wrap"><canvas id="c-funnel"></canvas></div>
-      </div>
-      <div class="chart-card">
-        <h3>Pipeline value by programme</h3>
-        <div class="chart-wrap"><canvas id="c-program"></canvas></div>
-        <div class="chart-legend">
-          <span class="legend-item"><span class="legend-dot" style="background:#5C4FD6"></span>Incubation ₹1.8 Cr</span>
-          <span class="legend-item"><span class="legend-dot" style="background:#0E8A6A"></span>Labs ₹0.9 Cr</span>
-          <span class="legend-item"><span class="legend-dot" style="background:#D85A30"></span>CircleU ₹1.0 Cr</span>
-          <span class="legend-item"><span class="legend-dot" style="background:#888880"></span>Non-program ₹0.5 Cr</span>
-        </div>
-      </div>
-    </div>
+          <div class="creator-section-header">Basic Information</div>
 
-    <div class="section">
-      <div class="section-title">Upcoming follow-ups (next 7 days)</div>
-      <div class="table-card">
-        <table>
-          <thead>
-            <tr>
-              <th>Lead name</th>
-              <th>Organisation</th>
-              <th>Stage</th>
-              <th>Engagement heat</th>
-              <th>Amount asked</th>
-              <th class="text-right">Follow-up date</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="fw-600">Rajesh Mehta</td>
-              <td>Tata Trusts</td>
-              <td><span class="pill pill-amber">Proposal</span></td>
-              <td><span class="pill pill-red">Hot</span></td>
-              <td class="text-mono">₹80,00,000</td>
-              <td class="text-right text-muted">02 Apr 2026</td>
-            </tr>
-            <tr>
-              <td class="fw-600">Meera Iyer</td>
-              <td>HDFC CSR</td>
-              <td><span class="pill pill-blue">Negotiation</span></td>
-              <td><span class="pill pill-red">Hot</span></td>
-              <td class="text-mono">₹1,20,00,000</td>
-              <td class="text-right text-muted">03 Apr 2026</td>
-            </tr>
-            <tr>
-              <td class="fw-600">Anil Kapoor</td>
-              <td>EdelGive Foundation</td>
-              <td><span class="pill pill-teal">Explore</span></td>
-              <td><span class="pill pill-amber">Warm</span></td>
-              <td class="text-mono">—</td>
-              <td class="text-right text-muted">05 Apr 2026</td>
-            </tr>
-            <tr>
-              <td class="fw-600">Fatima Sheikh</td>
-              <td>Azim Premji Foundation</td>
-              <td><span class="pill pill-purple">Contact/Intro</span></td>
-              <td><span class="pill pill-blue">Cold</span></td>
-              <td class="text-mono">—</td>
-              <td class="text-right text-muted">07 Apr 2026</td>
-            </tr>
-            <tr>
-              <td class="fw-600">Vikram Desai</td>
-              <td>Individual</td>
-              <td><span class="pill pill-amber">Proposal</span></td>
-              <td><span class="pill pill-amber">Warm</span></td>
-              <td class="text-mono">₹25,00,000</td>
-              <td class="text-right text-muted">07 Apr 2026</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <!-- ============ DASHBOARD 2: Deal Management ============ -->
-  <div class="dashboard" id="dash-1">
-    <div class="metrics">
-      <div class="metric-card">
-        <div class="metric-label">Deals won (FY)</div>
-        <div class="metric-value">12</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-label">Total received</div>
-        <div class="metric-value">₹2.8 Cr</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-label">Restricted funding</div>
-        <div class="metric-value">₹2.1 Cr</div>
-        <div class="metric-sub">75% of total</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-label">Overdue reports</div>
-        <div class="metric-value warning">3</div>
-      </div>
-    </div>
-
-    <div class="section">
-      <div class="section-title">Active deals overview</div>
-      <div class="table-card">
-        <table>
-          <thead>
-            <tr>
-              <th>Deal code</th>
-              <th>Deal name</th>
-              <th class="text-center">Stage</th>
-              <th class="text-center">Funding type</th>
-              <th class="text-right">Amount</th>
-              <th class="text-center">Programme</th>
-              <th class="text-center">End date</th>
-              <th>Owner</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="text-mono">DL-2025-001</td>
-              <td class="fw-600">Tata Trusts — Labs</td>
-              <td class="text-center"><span class="pill pill-green">Won</span></td>
-              <td class="text-center"><span class="pill pill-purple">Restricted</span></td>
-              <td class="text-right text-mono">₹80,00,000</td>
-              <td class="text-center">Labs</td>
-              <td class="text-center text-muted">Mar 2026</td>
-              <td>Ananya S.</td>
-            </tr>
-            <tr>
-              <td class="text-mono">DL-2025-003</td>
-              <td class="fw-600">HDFC CSR — Incubation</td>
-              <td class="text-center"><span class="pill pill-green">Won</span></td>
-              <td class="text-center"><span class="pill pill-purple">Restricted</span></td>
-              <td class="text-right text-mono">₹1,20,00,000</td>
-              <td class="text-center">Incubation</td>
-              <td class="text-center text-muted">Sep 2026</td>
-              <td>Rahul M.</td>
-            </tr>
-            <tr>
-              <td class="text-mono">DL-2025-005</td>
-              <td class="fw-600">Individual — General</td>
-              <td class="text-center"><span class="pill pill-blue">Open</span></td>
-              <td class="text-center"><span class="pill pill-gray">Unrestricted</span></td>
-              <td class="text-right text-mono">₹15,00,000</td>
-              <td class="text-center text-muted">—</td>
-              <td class="text-center text-muted">—</td>
-              <td>Priya K.</td>
-            </tr>
-            <tr>
-              <td class="text-mono">DL-2025-007</td>
-              <td class="fw-600">EdelGive — CircleU</td>
-              <td class="text-center"><span class="pill pill-green">Won</span></td>
-              <td class="text-center"><span class="pill pill-purple">Restricted</span></td>
-              <td class="text-right text-mono">₹50,00,000</td>
-              <td class="text-center">CircleU</td>
-              <td class="text-center text-muted">Dec 2025</td>
-              <td>Deepak R.</td>
-            </tr>
-            <tr>
-              <td class="text-mono">DL-2025-009</td>
-              <td class="fw-600">Wipro CSR — Labs</td>
-              <td class="text-center"><span class="pill pill-green">Won</span></td>
-              <td class="text-center"><span class="pill pill-purple">Restricted</span></td>
-              <td class="text-right text-mono">₹35,00,000</td>
-              <td class="text-center">Labs</td>
-              <td class="text-center text-muted">Jan 2026</td>
-              <td>Ananya S.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="grid-2 section">
-      <div class="chart-card">
-        <h3>Won deals by programme</h3>
-        <div class="chart-wrap"><canvas id="c-deal-prog"></canvas></div>
-        <div class="chart-legend">
-          <span class="legend-item"><span class="legend-dot" style="background:#5C4FD6"></span>Incubation</span>
-          <span class="legend-item"><span class="legend-dot" style="background:#0E8A6A"></span>Labs</span>
-          <span class="legend-item"><span class="legend-dot" style="background:#D85A30"></span>CircleU</span>
-          <span class="legend-item"><span class="legend-dot" style="background:#888880"></span>Non-program</span>
-        </div>
-      </div>
-      <div class="chart-card">
-        <h3>Restricted vs unrestricted (FY)</h3>
-        <div class="chart-wrap"><canvas id="c-funding"></canvas></div>
-        <div class="chart-legend">
-          <span class="legend-item"><span class="legend-dot" style="background:#5C4FD6"></span>Restricted ₹2.1 Cr</span>
-          <span class="legend-item"><span class="legend-dot" style="background:#888880"></span>Unrestricted ₹0.7 Cr</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="section">
-      <div class="section-title">Reporting cycle deadlines (next 30 days)</div>
-      <div class="table-card">
-        <table>
-          <thead>
-            <tr>
-              <th>Deal</th>
-              <th>Report type</th>
-              <th class="text-center">Frequency</th>
-              <th class="text-center">Due date</th>
-              <th class="text-center">Status</th>
-              <th>Owner</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="text-mono">DL-2025-003</td>
-              <td>Programme</td>
-              <td class="text-center">Monthly</td>
-              <td class="text-center text-muted">28 Mar 2026</td>
-              <td class="text-center"><span class="pill pill-red">Overdue</span></td>
-              <td>Rahul M.</td>
-            </tr>
-            <tr>
-              <td class="text-mono">DL-2025-005</td>
-              <td>Programme</td>
-              <td class="text-center">Quarterly</td>
-              <td class="text-center text-muted">31 Mar 2026</td>
-              <td class="text-center"><span class="pill pill-red">Overdue</span></td>
-              <td>Priya K.</td>
-            </tr>
-            <tr>
-              <td class="text-mono">DL-2025-001</td>
-              <td>Financial</td>
-              <td class="text-center">Quarterly</td>
-              <td class="text-center text-muted">10 Apr 2026</td>
-              <td class="text-center"><span class="pill pill-amber">Due soon</span></td>
-              <td>Ananya S.</td>
-            </tr>
-            <tr>
-              <td class="text-mono">DL-2025-007</td>
-              <td>Financial</td>
-              <td class="text-center">Bi-annually</td>
-              <td class="text-center text-muted">25 Apr 2026</td>
-              <td class="text-center"><span class="pill pill-green">On track</span></td>
-              <td>Deepak R.</td>
-            </tr>
-            <tr>
-              <td class="text-mono">DL-2025-001</td>
-              <td>Programme</td>
-              <td class="text-center">Monthly</td>
-              <td class="text-center text-muted">30 Apr 2026</td>
-              <td class="text-center"><span class="pill pill-green">On track</span></td>
-              <td>Ananya S.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="section">
-      <div class="section-title">Deals approaching end date (next 90 days)</div>
-      <div class="alert-row">
-        <div class="alert-card">
-          <div class="alert-card-top">
-            <span>DL-2025-007 — EdelGive CircleU</span>
-            <span class="pill pill-red">Dec 2025</span>
+          <div class="creator-field-row">
+            <div class="creator-field-label">First Name <span class="required-star">*</span></div>
+            <div class="creator-field-control">
+              <input class="form-control" type="text" placeholder="Enter first name" value="Priya">
+            </div>
           </div>
-          <p>₹50 L · Restricted · Owner: Deepak R.</p>
-        </div>
-        <div class="alert-card">
-          <div class="alert-card-top">
-            <span>DL-2025-009 — Wipro CSR Labs</span>
-            <span class="pill pill-amber">Jan 2026</span>
+          <div class="creator-field-row">
+            <div class="creator-field-label">Middle Name</div>
+            <div class="creator-field-control">
+              <input class="form-control" type="text" placeholder="Enter middle name" value="Ramesh">
+            </div>
           </div>
-          <p>₹35 L · Restricted · Owner: Ananya S.</p>
+          <div class="creator-field-row">
+            <div class="creator-field-label">Last Name</div>
+            <div class="creator-field-control">
+              <input class="form-control" type="text" placeholder="Enter last name" value="Jadhav">
+            </div>
+          </div>
+          <div class="creator-field-row two-col">
+            <div class="creator-field-label">Date of Birth <span class="required-star">*</span></div>
+            <div class="creator-field-control">
+              <input class="form-control" type="text" value="12-Jun-2017">
+              <input class="form-control" type="text" value="8" placeholder="Age (auto)">
+            </div>
+          </div>
+          <div class="creator-field-row">
+            <div class="creator-field-label">Gender <span class="required-star">*</span></div>
+            <div class="creator-field-control">
+              <select class="form-control">
+                <option>Female</option><option>Male</option><option>Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="creator-field-row">
+            <div class="creator-field-label">Registration Date <span class="required-star">*</span></div>
+            <div class="creator-field-control">
+              <input class="form-control" type="text" value="14-May-2026">
+            </div>
+          </div>
+          <div class="creator-field-row">
+            <div class="creator-field-label">Standard <span class="required-star">*</span></div>
+            <div class="creator-field-control">
+              <select class="form-control">
+                <option>1</option><option>2</option><option selected>3</option>
+                <option>4</option><option>5</option><option>6</option><option>7</option><option>8</option>
+              </select>
+            </div>
+          </div>
+          <div class="creator-field-row">
+            <div class="creator-field-label">School Medium <span class="required-star">*</span></div>
+            <div class="creator-field-control">
+              <select class="form-control">
+                <option>Marathi</option><option>English</option><option>Hindi</option><option>Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="creator-field-row">
+            <div class="creator-field-label">School <span class="required-star">*</span></div>
+            <div class="creator-field-control">
+              <select class="form-control">
+                <option>Deonar Marathi No. 01</option>
+                <option>BMC School Dharavi No. 03</option>
+                <option>Shivaji Nagar Municipal School</option>
+              </select>
+            </div>
+          </div>
+          <div class="creator-field-row">
+            <div class="creator-field-label">Ward / Community <span class="required-star">*</span></div>
+            <div class="creator-field-control">
+              <input class="form-control" type="text" value="M-Ward, Deonar">
+            </div>
+          </div>
+          <div class="creator-field-row">
+            <div class="creator-field-label">Student Status <span class="required-star">*</span></div>
+            <div class="creator-field-control">
+              <select class="form-control">
+                <option selected>New</option><option>Old</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="creator-section-header" style="margin-top:16px;">Parent / Guardian Details</div>
+
+          <div class="creator-field-row">
+            <div class="creator-field-label">Father's Name <span class="required-star">*</span></div>
+            <div class="creator-field-control">
+              <input class="form-control" type="text" value="Ramesh Jadhav">
+            </div>
+          </div>
+          <div class="creator-field-row">
+            <div class="creator-field-label">Mother's Name</div>
+            <div class="creator-field-control">
+              <input class="form-control" type="text" value="Sunita Jadhav">
+            </div>
+          </div>
+          <div class="creator-field-row">
+            <div class="creator-field-label">Contact Number <span class="required-star">*</span></div>
+            <div class="creator-field-control">
+              <input class="form-control" type="text" value="98765 43210">
+            </div>
+          </div>
+          <div class="creator-field-row">
+            <div class="creator-field-label">Residential Address</div>
+            <div class="creator-field-control">
+              <textarea class="form-control" rows="2">Hut No. 12, Deonar Gaon, M-Ward, Mumbai 400088</textarea>
+            </div>
+          </div>
+          <div class="creator-field-row">
+            <div class="creator-field-label">Parents' Occupation</div>
+            <div class="creator-field-control">
+              <input class="form-control" type="text" placeholder="e.g. Daily wage labourer">
+            </div>
+          </div>
+
+          <div class="creator-section-header" style="margin-top:16px;">Programme Assignment</div>
+          <div class="creator-field-row">
+            <div class="creator-field-label">Assigned Class <span class="required-star">*</span></div>
+            <div class="creator-field-control">
+              <select class="form-control">
+                <option>FLN · Grade 1A · AY 2026-27 · Deonar No.01</option>
+                <option>Reading · Grade 3B · AY 2026-27 · Deonar No.01</option>
+                <option>Library · Grade 5A · AY 2026-27 · Deonar No.01</option>
+              </select>
+            </div>
+          </div>
+          <div class="creator-field-row">
+            <div class="creator-field-label">Programme (auto)</div>
+            <div class="creator-field-control">
+              <input class="form-control" type="text" value="FLN" disabled style="background:#f3f4f6;color:#6b7280;">
+            </div>
+          </div>
+
+          <div class="creator-form-actions">
+            <button class="btn creator-btn-submit">Save Record</button>
+            <button class="btn creator-btn-secondary">Save &amp; Add Another</button>
+            <button class="btn creator-btn-secondary">Cancel</button>
+          </div>
         </div>
       </div>
-    </div>
+    </main>
   </div>
-
-  <!-- ============ DASHBOARD 3: Donor Engagement ============ -->
-  <div class="dashboard" id="dash-2">
-    <div class="metrics">
-      <div class="metric-card">
-        <div class="metric-label">Total accounts</div>
-        <div class="metric-value">34</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-label">Active contacts</div>
-        <div class="metric-value">89</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-label">Hot leads</div>
-        <div class="metric-value">9</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-label">FCRA donors</div>
-        <div class="metric-value">6</div>
-      </div>
-    </div>
-
-    <div class="grid-2 section">
-      <div class="chart-card">
-        <h3>Leads by source</h3>
-        <div class="chart-wrap"><canvas id="c-source"></canvas></div>
-      </div>
-      <div class="chart-card">
-        <h3>Donors by type (Accounts)</h3>
-        <div class="chart-wrap"><canvas id="c-type"></canvas></div>
-        <div class="chart-legend">
-          <span class="legend-item"><span class="legend-dot" style="background:#5C4FD6"></span>CSR</span>
-          <span class="legend-item"><span class="legend-dot" style="background:#0E8A6A"></span>Foundation</span>
-          <span class="legend-item"><span class="legend-dot" style="background:#D85A30"></span>Individual</span>
-          <span class="legend-item"><span class="legend-dot" style="background:#3D7AE2"></span>Bi-lateral</span>
-          <span class="legend-item"><span class="legend-dot" style="background:#6D9E22"></span>Government</span>
-          <span class="legend-item"><span class="legend-dot" style="background:#888880"></span>Institution</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="grid-2 section">
-      <div class="chart-card">
-        <h3>Engagement heat × stage</h3>
-        <div class="chart-wrap"><canvas id="c-heat"></canvas></div>
-        <div class="chart-legend">
-          <span class="legend-item"><span class="legend-dot" style="background:#E24B4A"></span>Hot</span>
-          <span class="legend-item"><span class="legend-dot" style="background:#EF9F27"></span>Warm</span>
-          <span class="legend-item"><span class="legend-dot" style="background:#85B7EB"></span>Cold</span>
-        </div>
-      </div>
-      <div class="chart-card">
-        <h3>Giving capacity distribution</h3>
-        <div class="chart-wrap"><canvas id="c-capacity"></canvas></div>
-      </div>
-    </div>
-
-    <div class="grid-2 section">
-      <div class="chart-card">
-        <h3>Funding origin split</h3>
-        <div class="chart-wrap"><canvas id="c-fcra"></canvas></div>
-        <div class="chart-legend">
-          <span class="legend-item"><span class="legend-dot" style="background:#0E8A6A"></span>Local</span>
-          <span class="legend-item"><span class="legend-dot" style="background:#3D7AE2"></span>FCRA</span>
-        </div>
-      </div>
-      <div class="chart-card">
-        <h3>Leads by programme interest</h3>
-        <div class="chart-wrap"><canvas id="c-interest"></canvas></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ============ DASHBOARD 4: Team Performance ============ -->
-  <div class="dashboard" id="dash-3">
-    <div class="metrics">
-      <div class="metric-card">
-        <div class="metric-label">Total team leads</div>
-        <div class="metric-value">47</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-label">Proposals sent (FY)</div>
-        <div class="metric-value">15</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-label">Avg. conversion</div>
-        <div class="metric-value">25%</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-label">Overdue follow-ups</div>
-        <div class="metric-value danger">4</div>
-      </div>
-    </div>
-
-    <div class="section">
-      <div class="section-title">Fundraiser scorecard</div>
-      <div class="table-card">
-        <table>
-          <thead>
-            <tr>
-              <th>Owner</th>
-              <th class="text-center">Active leads</th>
-              <th class="text-center">Proposals</th>
-              <th class="text-center">Deals won</th>
-              <th class="text-right">Value won</th>
-              <th class="text-center">Conv. %</th>
-              <th class="text-center">Overdue follow-ups</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="fw-600">Ananya S.</td>
-              <td class="text-center">14</td>
-              <td class="text-center">6</td>
-              <td class="text-center">4</td>
-              <td class="text-right text-mono">₹1,20,00,000</td>
-              <td class="text-center"><span class="pill pill-green">29%</span></td>
-              <td class="text-center">0</td>
-            </tr>
-            <tr>
-              <td class="fw-600">Rahul M.</td>
-              <td class="text-center">12</td>
-              <td class="text-center">4</td>
-              <td class="text-center">3</td>
-              <td class="text-right text-mono">₹85,00,000</td>
-              <td class="text-center"><span class="pill pill-amber">25%</span></td>
-              <td class="text-center">1</td>
-            </tr>
-            <tr>
-              <td class="fw-600">Priya K.</td>
-              <td class="text-center">11</td>
-              <td class="text-center">3</td>
-              <td class="text-center">3</td>
-              <td class="text-right text-mono">₹45,00,000</td>
-              <td class="text-center"><span class="pill pill-amber">27%</span></td>
-              <td class="text-center">0</td>
-            </tr>
-            <tr>
-              <td class="fw-600">Deepak R.</td>
-              <td class="text-center">10</td>
-              <td class="text-center">2</td>
-              <td class="text-center">2</td>
-              <td class="text-right text-mono">₹68,00,000</td>
-              <td class="text-center"><span class="pill pill-red">20%</span></td>
-              <td class="text-center danger fw-600">3</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="grid-2 section">
-      <div class="chart-card">
-        <h3>Leads by owner (stage breakdown)</h3>
-        <div class="chart-wrap"><canvas id="c-owner"></canvas></div>
-        <div class="chart-legend">
-          <span class="legend-item"><span class="legend-dot" style="background:#CECBF6"></span>Identify/Contact</span>
-          <span class="legend-item"><span class="legend-dot" style="background:#9FE1CB"></span>Explore/Proposal</span>
-          <span class="legend-item"><span class="legend-dot" style="background:#FAC775"></span>Negotiation</span>
-        </div>
-      </div>
-      <div class="chart-card">
-        <h3>Follow-up compliance (last 30 days)</h3>
-        <div class="chart-wrap"><canvas id="c-followup"></canvas></div>
-        <div class="chart-legend">
-          <span class="legend-item"><span class="legend-dot" style="background:#0E8A6A"></span>On time</span>
-          <span class="legend-item"><span class="legend-dot" style="background:#E24B4A"></span>Missed</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
 </div>
+</div><!-- /screen-student-form -->
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+
+<!-- ══════════════════════════════════════════════════════════
+     SCREEN 2 — Student List View
+     ══════════════════════════════════════════════════════════ -->
+<div id="screen-student-list" class="screen">
+<div class="creator-shell theme-dark-leftnav" style="flex:1;height:100%;">
+  <nav class="creator-navbar">
+    <div class="creator-navbar-logo">DS</div>
+    <div class="creator-navbar-app">
+      <div class="creator-navbar-app-name">Doorstep School MIS</div>
+      <div class="creator-navbar-form-name">Student Register</div>
+    </div>
+    <div class="creator-navbar-right">
+      <div class="creator-navbar-icon-btn">🔔</div>
+      <div class="creator-navbar-user">
+        <div class="creator-navbar-avatar">RS</div>
+        Rajeshree S.
+      </div>
+    </div>
+  </nav>
+  <div class="creator-body" style="flex:1;overflow:hidden;">
+    <nav class="creator-sidebar">
+      <div class="creator-sidebar-header">
+        <div class="creator-sidebar-logo">DS</div>
+        <div class="creator-sidebar-appname">DSS MIS</div>
+      </div>
+      <div class="creator-sidebar-section">RECORDS</div>
+      <div data-screen="screen-student-list" style="cursor:pointer;" class="creator-nav-item active"><span class="nav-icon">👤</span> Students</div>
+      <div data-screen="screen-student-list" style="cursor:pointer;" class="creator-nav-item"><span class="nav-icon">🏫</span> Schools</div>
+      <div data-screen="screen-student-list" style="cursor:pointer;" class="creator-nav-item"><span class="nav-icon">📚</span> Classes</div>
+      <div data-screen="screen-student-list" style="cursor:pointer;" class="creator-nav-item"><span class="nav-icon">👩‍🏫</span> Teachers</div>
+      <div class="creator-sidebar-section">OPERATIONS</div>
+      <div data-screen="screen-attendance" style="cursor:pointer;" class="creator-nav-item"><span class="nav-icon">✅</span> Attendance</div>
+      <div data-screen="screen-fln-assess" style="cursor:pointer;" class="creator-nav-item"><span class="nav-icon">📊</span> Assessments</div>
+      <div data-screen="screen-student-list" style="cursor:pointer;" class="creator-nav-item"><span class="nav-icon">🚪</span> Exit / Dropout</div>
+      <div class="creator-sidebar-section">REPORTING</div>
+      <div data-screen="screen-pm-dash" style="cursor:pointer;" class="creator-nav-item"><span class="nav-icon">📈</span> Reports</div>
+      <div data-screen="screen-pm-dash" style="cursor:pointer;" class="creator-nav-item"><span class="nav-icon">💰</span> Donors</div>
+      <div class="creator-sidebar-footer">
+        <div class="creator-sidebar-footer-avatar">RS</div>
+        <div class="creator-sidebar-footer-name">Rajeshree S. · Teacher</div>
+      </div>
+    </nav>
+    <main class="creator-canvas" style="padding:0;">
+      <div style="background:#fff;height:100%;display:flex;flex-direction:column;">
+        <div class="creator-list-header">
+          <span class="creator-list-title">Students</span>
+          <span style="font-size:12px;color:#9ca3af;margin-left:6px;">(48 records)</span>
+          <div style="margin-left:auto;display:flex;gap:8px;align-items:center;">
+            <select class="form-control" style="width:130px;height:30px;font-size:12px;">
+              <option>All Programmes</option><option>FLN</option><option>Reading</option><option>Library</option>
+            </select>
+            <select class="form-control" style="width:120px;height:30px;font-size:12px;">
+              <option>All Status</option><option>Active</option><option>Dropout</option>
+            </select>
+            <input class="form-control" type="text" placeholder="🔍 Search student..." style="width:160px;height:30px;font-size:12px;">
+            <button class="btn creator-btn-submit btn-sm">+ Add Student</button>
+          </div>
+        </div>
+        <div style="flex:1;overflow-y:auto;">
+          <table class="creator-table">
+            <thead>
+              <tr>
+                <th><input type="checkbox"></th>
+                <th>Student Name</th>
+                <th>School</th>
+                <th>Programme</th>
+                <th>Grade</th>
+                <th>Status</th>
+                <th>Literacy Level</th>
+                <th>Numeracy Level</th>
+                <th>Last Assessment</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="background:#f0f7ff;">
+                <td><input type="checkbox" checked></td>
+                <td><a class="creator-link">Priya Ramesh Jadhav</a></td>
+                <td>Deonar No. 01</td>
+                <td><span class="badge badge-info">FLN</span></td>
+                <td>1A</td>
+                <td><span class="badge badge-success">Active</span></td>
+                <td><span class="level-badge level-l3">L3</span></td>
+                <td><span class="level-badge level-l2">L2</span></td>
+                <td>15-Apr-2026</td>
+                <td><a class="creator-link" style="font-size:11px;">View</a></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox"></td>
+                <td><a class="creator-link">Sumit Prabhu Sable</a></td>
+                <td>Deonar No. 01</td>
+                <td><span class="badge badge-info">FLN</span></td>
+                <td>1A</td>
+                <td><span class="badge badge-success">Active</span></td>
+                <td><span class="level-badge level-l2">L2</span></td>
+                <td><span class="level-badge level-l1">L1</span></td>
+                <td>14-Apr-2026</td>
+                <td><a class="creator-link" style="font-size:11px;">View</a></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox"></td>
+                <td><a class="creator-link">Aaryan Balu Thorat</a></td>
+                <td>Deonar No. 01</td>
+                <td><span class="badge badge-info">FLN</span></td>
+                <td>1A</td>
+                <td><span class="badge badge-success">Active</span></td>
+                <td><span class="level-badge level-l1">L1</span></td>
+                <td><span class="level-badge level-pl">PL</span></td>
+                <td>14-Apr-2026</td>
+                <td><a class="creator-link" style="font-size:11px;">View</a></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox"></td>
+                <td><a class="creator-link">Anjali Suresh Patil</a></td>
+                <td>BMC Dharavi No. 03</td>
+                <td><span class="badge badge-purple">Reading</span></td>
+                <td>3B</td>
+                <td><span class="badge badge-success">Active</span></td>
+                <td>Level 6</td>
+                <td>—</td>
+                <td>20-Mar-2026</td>
+                <td><a class="creator-link" style="font-size:11px;">View</a></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox"></td>
+                <td><a class="creator-link">Mohammed Arif Khan</a></td>
+                <td>BMC Dharavi No. 03</td>
+                <td><span class="badge badge-purple">Reading</span></td>
+                <td>3B</td>
+                <td><span class="badge badge-warning">Irregular</span></td>
+                <td>Level 4</td>
+                <td>—</td>
+                <td>01-Mar-2026</td>
+                <td><a class="creator-link" style="font-size:11px;">View</a></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox"></td>
+                <td><a class="creator-link">Deepa Nair</a></td>
+                <td>Shivaji Nagar Municipal</td>
+                <td><span class="badge badge-green">Library</span></td>
+                <td>5A</td>
+                <td><span class="badge badge-success">Active</span></td>
+                <td>Level 8</td>
+                <td>—</td>
+                <td>10-Feb-2026</td>
+                <td><a class="creator-link" style="font-size:11px;">View</a></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox"></td>
+                <td><a class="creator-link">Hayat Nasir Kureshi</a></td>
+                <td>Deonar No. 01</td>
+                <td><span class="badge badge-info">FLN</span></td>
+                <td>1A</td>
+                <td><span class="badge badge-danger">Dropout</span></td>
+                <td><span class="level-badge level-l1">L1</span></td>
+                <td><span class="level-badge level-pl">PL</span></td>
+                <td>28-Feb-2026</td>
+                <td><a class="creator-link" style="font-size:11px;">View</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="creator-pagination">
+          Showing 1–7 of 48 records &nbsp;|&nbsp;
+          <a class="creator-link">← Prev</a> &nbsp; Page 1 of 7 &nbsp; <a class="creator-link">Next →</a>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+</div><!-- /screen-student-list -->
+
+
+<!-- ══════════════════════════════════════════════════════════
+     SCREEN 3 — Attendance Entry
+     ══════════════════════════════════════════════════════════ -->
+<div id="screen-attendance" class="screen">
+<div class="creator-shell theme-dark-leftnav" style="flex:1;height:100%;">
+  <nav class="creator-navbar">
+    <div class="creator-navbar-logo">DS</div>
+    <div class="creator-navbar-app">
+      <div class="creator-navbar-app-name">Doorstep School MIS</div>
+      <div class="creator-navbar-form-name">Attendance Entry</div>
+    </div>
+    <div class="creator-navbar-right">
+      <div class="creator-navbar-user"><div class="creator-navbar-avatar">RS</div> Rajeshree S.</div>
+    </div>
+  </nav>
+  <div class="creator-body" style="flex:1;overflow:hidden;">
+    <nav class="creator-sidebar">
+      <div class="creator-sidebar-header"><div class="creator-sidebar-logo">DS</div><div class="creator-sidebar-appname">DSS MIS</div></div>
+      <div class="creator-sidebar-section">RECORDS</div>
+      <div data-screen="screen-student-list" style="cursor:pointer;" class="creator-nav-item"><span class="nav-icon">👤</span> Students</div>
+      <div data-screen="screen-student-list" style="cursor:pointer;" class="creator-nav-item"><span class="nav-icon">🏫</span> Schools</div>
+      <div data-screen="screen-student-list" style="cursor:pointer;" class="creator-nav-item"><span class="nav-icon">📚</span> Classes</div>
+      <div data-screen="screen-student-list" style="cursor:pointer;" class="creator-nav-item"><span class="nav-icon">👩‍🏫</span> Teachers</div>
+      <div class="creator-sidebar-section">OPERATIONS</div>
+      <div data-screen="screen-attendance" style="cursor:pointer;" class="creator-nav-item active"><span class="nav-icon">✅</span> Attendance</div>
+      <div data-screen="screen-fln-assess" style="cursor:pointer;" class="creator-nav-item"><span class="nav-icon">📊</span> Assessments</div>
+      <div data-screen="screen-student-list" style="cursor:pointer;" class="creator-nav-item"><span class="nav-icon">🚪</span> Exit / Dropout</div>
+      <div class="creator-sidebar-footer"><div class="creator-sidebar-footer-avatar">RS</div><div class="creator-sidebar-footer-name">Rajeshree S. · Teacher</div></div>
+    </nav>
+    <main class="creator-canvas">
+      <div class="creator-canvas-inner">
+        <div class="creator-form-title">Class Attendance — Morning Session</div>
+        <div class="creator-form-body">
+          <div class="creator-section-header">Session Details</div>
+          <div class="creator-field-row two-col">
+            <div class="creator-field-label">Attendance Date <span class="required-star">*</span></div>
+            <div class="creator-field-control">
+              <input class="form-control" type="text" value="20-May-2026">
+              <select class="form-control"><option selected>Morning</option><option>Afternoon</option></select>
+            </div>
+          </div>
+          <div class="creator-field-row">
+            <div class="creator-field-label">Class <span class="required-star">*</span></div>
+            <div class="creator-field-control">
+              <select class="form-control"><option>FLN · Grade 1A · Deonar Marathi No. 01</option></select>
+            </div>
+          </div>
+          <div class="creator-field-row">
+            <div class="creator-field-label">Teacher <span class="required-star">*</span></div>
+            <div class="creator-field-control">
+              <input class="form-control" value="Rajeshree Sharma" disabled style="background:#f3f4f6;color:#6b7280;">
+            </div>
+          </div>
+
+          <div class="creator-section-header" style="margin-top:16px;">Mark Attendance (13 students)</div>
+          <div style="font-size:11px;color:#6b7280;margin-bottom:10px;">✅ = Present &nbsp; ❌ = Absent — tap to toggle</div>
+          <table class="att-table">
+            <thead>
+              <tr>
+                <th>#</th><th>Student Name</th><th>Gender</th><th>Std</th><th>Present</th><th>Absent Reason</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>1</td><td>Priya Ramesh Jadhav</td><td>F</td><td>1A</td><td><span style="color:#059669;font-size:16px;">✅</span></td><td>—</td></tr>
+              <tr><td>2</td><td>Sumit Prabhu Sable</td><td>M</td><td>1A</td><td><span style="color:#059669;font-size:16px;">✅</span></td><td>—</td></tr>
+              <tr><td>3</td><td>Aaryan Balu Thorat</td><td>M</td><td>1A</td><td><span style="color:#059669;font-size:16px;">✅</span></td><td>—</td></tr>
+              <tr style="background:#fff8f0;"><td>4</td><td>Jisan Jasim Ansari</td><td>M</td><td>1A</td><td><span style="color:#dc2626;font-size:16px;">❌</span></td><td><select class="form-control" style="height:26px;font-size:11px;width:160px;"><option>Unwell</option><option>Native Place</option><option>Not Interested</option><option>Other</option></select></td></tr>
+              <tr><td>5</td><td>Aaryan Ganesh Pardekar</td><td>M</td><td>1A</td><td><span style="color:#059669;font-size:16px;">✅</span></td><td>—</td></tr>
+              <tr><td>6</td><td>Prutbviraj Balaji Ragade</td><td>M</td><td>1A</td><td><span style="color:#059669;font-size:16px;">✅</span></td><td>—</td></tr>
+              <tr style="background:#fff8f0;"><td>7</td><td>Vinayak Rohit Ragade</td><td>M</td><td>1A</td><td><span style="color:#dc2626;font-size:16px;">❌</span></td><td><select class="form-control" style="height:26px;font-size:11px;width:160px;"><option>Shifted Home</option></select></td></tr>
+              <tr><td>8</td><td>Vinayak Shyamlal Pathe</td><td>M</td><td>1A</td><td><span style="color:#059669;font-size:16px;">✅</span></td><td>—</td></tr>
+              <tr><td>9</td><td>Surya Chandrashekhar Gautam</td><td>M</td><td>1A</td><td><span style="color:#059669;font-size:16px;">✅</span></td><td>—</td></tr>
+              <tr><td>10</td><td>Hasnain Afroj Kureshi</td><td>M</td><td>1A</td><td><span style="color:#059669;font-size:16px;">✅</span></td><td>—</td></tr>
+              <tr><td>11</td><td>Gaurav Nilesh Jadhav</td><td>M</td><td>1A</td><td><span style="color:#059669;font-size:16px;">✅</span></td><td>—</td></tr>
+              <tr><td>12</td><td>Hayat Nasir Kureshi</td><td>F</td><td>1A</td><td><span style="color:#059669;font-size:16px;">✅</span></td><td>—</td></tr>
+              <tr><td>13</td><td>Mahek Ajit Gautam</td><td>F</td><td>1A</td><td><span style="color:#059669;font-size:16px;">✅</span></td><td>—</td></tr>
+            </tbody>
+          </table>
+          <div style="margin-top:12px;padding:10px 14px;background:#f0fdf4;border-radius:6px;font-size:12px;color:#065f46;border:1px solid #bbf7d0;">
+            <strong>Summary:</strong> 11 Present · 2 Absent · Attendance Rate: <strong>84.6%</strong>
+          </div>
+          <div class="creator-form-actions">
+            <button class="btn creator-btn-submit">Submit Attendance</button>
+            <button class="btn creator-btn-secondary">Save Draft</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+</div><!-- /screen-attendance -->
+
+
+<!-- ══════════════════════════════════════════════════════════
+     SCREEN 4 — FLN Performance Assessment Form
+     ══════════════════════════════════════════════════════════ -->
+<div id="screen-fln-assess" class="screen">
+<div class="creator-shell theme-dark-leftnav" style="flex:1;height:100%;">
+  <nav class="creator-navbar">
+    <div class="creator-navbar-logo">DS</div>
+    <div class="creator-navbar-app">
+      <div class="creator-navbar-app-name">Doorstep School MIS</div>
+      <div class="creator-navbar-form-name">FLN Performance Assessment</div>
+    </div>
+    <div class="creator-navbar-right">
+      <div class="creator-navbar-user"><div class="creator-navbar-avatar">RS</div> Rajeshree S.</div>
+    </div>
+  </nav>
+  <div class="creator-body" style="flex:1;overflow:hidden;">
+    <nav class="creator-sidebar">
+      <div class="creator-sidebar-header"><div class="creator-sidebar-logo">DS</div><div class="creator-sidebar-appname">DSS MIS</div></div>
+      <div class="creator-sidebar-section">RECORDS</div>
+      <div data-screen="screen-student-list" style="cursor:pointer;" class="creator-nav-item"><span class="nav-icon">👤</span> Students</div>
+      <div data-screen="screen-student-list" style="cursor:pointer;" class="creator-nav-item"><span class="nav-icon">🏫</span> Schools</div>
+      <div data-screen="screen-student-list" style="cursor:pointer;" class="creator-nav-item"><span class="nav-icon">📚</span> Classes</div>
+      <div data-screen="screen-student-list" style="cursor:pointer;" class="creator-nav-item"><span class="nav-icon">👩‍🏫</span> Teachers</div>
+      <div class="creator-sidebar-section">OPERATIONS</div>
+      <div data-screen="screen-attendance" style="cursor:pointer;" class="creator-nav-item"><span class="nav-icon">✅</span> Attendance</div>
+      <div data-screen="screen-fln-assess" style="cursor:pointer;" class="creator-nav-item active"><span class="nav-icon">📊</span> Assessments</div>
+      <div data-screen="screen-student-list" style="cursor:pointer;" class="creator-nav-item"><span class="nav-icon">🚪</span> Exit / Dropout</div>
+      <div class="creator-sidebar-footer"><div class="creator-sidebar-footer-avatar">RS</div><div class="creator-sidebar-footer-name">Rajeshree S. · Teacher</div></div>
+    </nav>
+    <main class="creator-canvas">
+      <div class="creator-canvas-inner">
+        <div class="creator-form-title">FLN Performance Assessment — Priya Ramesh Jadhav</div>
+        <div class="creator-form-body">
+          <div class="creator-section-header">Basic Information</div>
+          <div class="creator-field-row two-col">
+            <div class="creator-field-label">Assessment Type <span class="required-star">*</span></div>
+            <div class="creator-field-control">
+              <select class="form-control"><option>Baseline</option><option selected>Midline</option><option>Endline</option></select>
+              <input class="form-control" type="text" value="20-May-2026" placeholder="Assessment Date *">
+            </div>
+          </div>
+          <div style="padding:8px 12px;background:#fef3c7;border-radius:6px;font-size:11px;color:#92400e;margin-bottom:12px;border:1px solid #fde68a;">
+            ⏰ <strong>Midline Due:</strong> Baseline was done on 15-Jan-2026. Midline due by 15-May-2026 — <strong>5 days overdue</strong>.
+          </div>
+
+          <div class="creator-section-header">Vowels Known (स्वर) — tick all recognised</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;padding-left:176px;">
+            <label style="display:flex;align-items:center;gap:4px;font-size:13px;"><input type="checkbox" checked> अ</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:13px;"><input type="checkbox" checked> आ</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:13px;"><input type="checkbox" checked> इ</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:13px;"><input type="checkbox" checked> ई</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:13px;"><input type="checkbox"> उ</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:13px;"><input type="checkbox"> ऊ</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:13px;"><input type="checkbox"> ए</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:13px;"><input type="checkbox"> ओ</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:13px;"><input type="checkbox"> औ</label>
+          </div>
+
+          <div class="creator-section-header">Consonants Known (व्यंजन)</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;padding-left:176px;">
+            <label style="display:flex;align-items:center;gap:4px;font-size:13px;"><input type="checkbox" checked> क</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:13px;"><input type="checkbox"> ख</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:13px;"><input type="checkbox" checked> ग</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:13px;"><input type="checkbox"> घ</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:13px;"><input type="checkbox" checked> च</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:13px;"><input type="checkbox"> झ</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:13px;"><input type="checkbox" checked> न</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:13px;"><input type="checkbox" checked> प</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:13px;"><input type="checkbox" checked> ब</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:13px;"><input type="checkbox"> भ</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:13px;"><input type="checkbox" checked> म</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:13px;"><input type="checkbox" checked> र</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:13px;"><input type="checkbox" checked> ल</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:13px;"><input type="checkbox"> श</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:13px;"><input type="checkbox" checked> स</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:13px;"><input type="checkbox" checked> ह</label>
+          </div>
+
+          <div class="creator-section-header">Matras Known (मात्राएं)</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;padding-left:176px;">
+            <label style="display:flex;align-items:center;gap:4px;font-size:13px;"><input type="checkbox" checked> ा</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:13px;"><input type="checkbox" checked> ि</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:13px;"><input type="checkbox" checked> ी</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:13px;"><input type="checkbox"> ु</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:13px;"><input type="checkbox"> ू</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:13px;"><input type="checkbox"> े</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:13px;"><input type="checkbox"> ै</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:13px;"><input type="checkbox"> ो</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:13px;"><input type="checkbox"> ौ</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:13px;"><input type="checkbox"> ं</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:13px;"><input type="checkbox"> ः</label>
+          </div>
+
+          <div class="creator-section-header">Computed Scores (Auto-calculated)</div>
+          <div class="creator-field-row two-col">
+            <div class="creator-field-label">Language Score</div>
+            <div class="creator-field-control">
+              <input class="form-control" value="27 / 90" disabled style="background:#e0f2fe;color:#0369a1;font-weight:600;">
+              <input class="form-control" value="L3 — Reads simple words" disabled style="background:#e0f2fe;color:#0369a1;font-weight:600;">
+            </div>
+          </div>
+
+          <div class="creator-section-header">Numeracy Assessment</div>
+          <div class="creator-field-row two-col">
+            <div class="creator-field-label">Maths Score <span class="required-star">*</span><br><span style="font-weight:400;font-size:10px;">(0–70)</span></div>
+            <div class="creator-field-control">
+              <input class="form-control" type="number" value="18" min="0" max="70">
+              <input class="form-control" value="L1 — Basic counting" disabled style="background:#fef3c7;color:#92400e;font-weight:600;">
+            </div>
+          </div>
+
+          <div class="creator-form-actions">
+            <button class="btn creator-btn-submit">Save Assessment</button>
+            <button class="btn creator-btn-secondary">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+</div><!-- /screen-fln-assess -->
+
+
+<!-- ══════════════════════════════════════════════════════════
+     SCREEN 5 — Teacher Dashboard
+     ══════════════════════════════════════════════════════════ -->
+<div id="screen-teacher-dash" class="screen">
+<div class="creator-shell theme-topnav-dark" style="flex:1;height:100%;flex-direction:column;">
+  <nav class="creator-navbar">
+    <div class="creator-navbar-logo">DS</div>
+    <div class="creator-navbar-app">
+      <div class="creator-navbar-app-name">Doorstep School MIS</div>
+    </div>
+    <div class="creator-navbar-right">
+      <div class="creator-navbar-user"><div class="creator-navbar-avatar">RS</div> Rajeshree S.</div>
+    </div>
+  </nav>
+  <div style="display:flex;flex:1;overflow:hidden;">
+    <nav class="creator-sidebar theme-dark-leftnav" style="width:180px;background:#1a1b2e;display:flex;flex-direction:column;flex-shrink:0;">
+      <div style="padding:10px 14px;font-size:10px;font-weight:600;letter-spacing:0.7px;color:#6b7080;text-transform:uppercase;">TODAY</div>
+      <div data-screen="screen-teacher-dash" style="cursor:pointer;" class="creator-nav-item active" style="color:#b8bdd8;font-size:13px;padding:8px 14px;display:flex;align-items:center;gap:8px;background:#5051f9;border-radius:4px;margin:0 8px;"><span>📊</span> My Dashboard</div>
+      <div data-screen="screen-attendance" style="cursor:pointer;" class="creator-nav-item" style="color:#b8bdd8;font-size:13px;padding:8px 14px;display:flex;align-items:center;gap:8px;"><span>✅</span> Attendance</div>
+      <div data-screen="screen-fln-assess" style="cursor:pointer;" class="creator-nav-item" style="color:#b8bdd8;font-size:13px;padding:8px 14px;display:flex;align-items:center;gap:8px;"><span>📝</span> Assessments</div>
+      <div style="padding:10px 14px;font-size:10px;font-weight:600;letter-spacing:0.7px;color:#6b7080;text-transform:uppercase;margin-top:8px;">RECORDS</div>
+      <div data-screen="screen-student-list" style="cursor:pointer;" class="creator-nav-item" style="color:#b8bdd8;font-size:13px;padding:8px 14px;display:flex;align-items:center;gap:8px;"><span>👤</span> My Students</div>
+      <div data-screen="screen-student-list" style="cursor:pointer;" class="creator-nav-item" style="color:#b8bdd8;font-size:13px;padding:8px 14px;display:flex;align-items:center;gap:8px;"><span>📚</span> My Classes</div>
+    </nav>
+    <main class="canvas-pad" style="flex:1;overflow-y:auto;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <div>
+          <div style="font-size:18px;font-weight:700;color:#1f2937;">Good morning, Rajeshree 👋</div>
+          <div style="font-size:12px;color:#6b7280;">Tuesday, 20 May 2026 · FLN Grade 1A · Deonar No. 01</div>
+        </div>
+        <button class="btn creator-btn-submit btn-sm">+ Take Attendance</button>
+      </div>
+
+      <!-- Today alerts -->
+      <div class="dash-section-title">⚡ Today's Actions</div>
+      <div class="dash-grid-3" style="margin-bottom:16px;">
+        <div class="alert-card red">
+          <div class="alert-icon">📋</div>
+          <div class="alert-body">
+            <div class="alert-title">Morning Attendance Pending</div>
+            <div class="alert-desc">FLN Grade 1A — not yet taken today</div>
+          </div>
+          <div class="alert-count red">!</div>
+        </div>
+        <div class="alert-card amber">
+          <div class="alert-icon">📊</div>
+          <div class="alert-body">
+            <div class="alert-title">Baseline Assessments Due</div>
+            <div class="alert-desc">3 new students enrolled — no Baseline yet</div>
+          </div>
+          <div class="alert-count amber">3</div>
+        </div>
+        <div class="alert-card blue">
+          <div class="alert-icon">📅</div>
+          <div class="alert-body">
+            <div class="alert-title">FLN Monthly Tracking</div>
+            <div class="alert-desc">May tracking due for 8 FLN students</div>
+          </div>
+          <div class="alert-count blue">8</div>
+        </div>
+      </div>
+
+      <!-- Overdue -->
+      <div class="dash-section-title">🔴 Overdue</div>
+      <div class="dash-grid-3" style="margin-bottom:16px;">
+        <div class="alert-card red">
+          <div class="alert-icon">⏰</div>
+          <div class="alert-body">
+            <div class="alert-title">Overdue Midline Assessments</div>
+            <div class="alert-desc">Midline window exceeded — past 150 days</div>
+          </div>
+          <div class="alert-count red">2</div>
+        </div>
+        <div class="alert-card amber">
+          <div class="alert-icon">📈</div>
+          <div class="alert-body">
+            <div class="alert-title">Midline Assessment Pending</div>
+            <div class="alert-desc">Baseline &gt;120 days ago, no Midline yet</div>
+          </div>
+          <div class="alert-count amber">5</div>
+        </div>
+        <div class="alert-card green">
+          <div class="alert-icon">🆕</div>
+          <div class="alert-body">
+            <div class="alert-title">New Registrations (Last 7 Days)</div>
+            <div class="alert-desc">Students added this week</div>
+          </div>
+          <div class="alert-count green">3</div>
+        </div>
+      </div>
+
+      <!-- Class attendance strip -->
+      <div class="section-card">
+        <div class="dash-section-title">📅 This Week's Attendance — FLN Grade 1A</div>
+        <div style="display:flex;gap:8px;">
+          <div style="flex:1;text-align:center;background:#f0fdf4;border-radius:6px;padding:10px;border:1px solid #bbf7d0;">
+            <div style="font-size:20px;font-weight:700;color:#059669;">92%</div>
+            <div style="font-size:10px;color:#6b7280;">Mon 19 May</div>
+          </div>
+          <div style="flex:1;text-align:center;background:#fff8f0;border-radius:6px;padding:10px;border:1px solid #fde68a;border:2px dashed #d97706;">
+            <div style="font-size:20px;font-weight:700;color:#d97706;">—</div>
+            <div style="font-size:10px;color:#6b7280;">Today (Pending)</div>
+          </div>
+          <div style="flex:1;text-align:center;background:#f0fdf4;border-radius:6px;padding:10px;border:1px solid #bbf7d0;">
+            <div style="font-size:20px;font-weight:700;color:#059669;">88%</div>
+            <div style="font-size:10px;color:#6b7280;">Fri 16 May</div>
+          </div>
+          <div style="flex:1;text-align:center;background:#f0fdf4;border-radius:6px;padding:10px;border:1px solid #bbf7d0;">
+            <div style="font-size:20px;font-weight:700;color:#059669;">85%</div>
+            <div style="font-size:10px;color:#6b7280;">Thu 15 May</div>
+          </div>
+          <div style="flex:1;text-align:center;background:#f0fdf4;border-radius:6px;padding:10px;border:1px solid #bbf7d0;">
+            <div style="font-size:20px;font-weight:700;color:#059669;">90%</div>
+            <div style="font-size:10px;color:#6b7280;">Wed 14 May</div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+</div><!-- /screen-teacher-dash -->
+
+
+<!-- ══════════════════════════════════════════════════════════
+     SCREEN 6 — Coordinator Dashboard
+     ══════════════════════════════════════════════════════════ -->
+<div id="screen-coord-dash" class="screen">
+<div class="creator-shell theme-topnav-dark" style="flex:1;height:100%;flex-direction:column;">
+  <nav class="creator-navbar">
+    <div class="creator-navbar-logo">DS</div>
+    <div class="creator-navbar-app">
+      <div class="creator-navbar-app-name">Doorstep School MIS</div>
+    </div>
+    <div class="creator-navbar-right">
+      <div class="creator-navbar-user"><div class="creator-navbar-avatar">SW</div> Swapnil Waghmare</div>
+    </div>
+  </nav>
+  <div style="display:flex;flex:1;overflow:hidden;">
+    <nav class="creator-sidebar theme-dark-leftnav" style="width:180px;background:#1a1b2e;display:flex;flex-direction:column;flex-shrink:0;">
+      <div style="padding:10px 14px;font-size:10px;font-weight:600;letter-spacing:0.7px;color:#6b7080;text-transform:uppercase;">OVERVIEW</div>
+      <div data-screen="screen-coord-dash" style="cursor:pointer;" class="creator-nav-item active" style="color:#b8bdd8;font-size:13px;padding:8px 14px;display:flex;align-items:center;gap:8px;background:#5051f9;border-radius:4px;margin:0 8px;"><span>📊</span> Dashboard</div>
+      <div class="creator-nav-item" style="color:#b8bdd8;font-size:13px;padding:8px 14px;display:flex;align-items:center;gap:8px;"><span>🏫</span> Schools (6)</div>
+      <div data-screen="screen-student-list" style="cursor:pointer;" class="creator-nav-item" style="color:#b8bdd8;font-size:13px;padding:8px 14px;display:flex;align-items:center;gap:8px;"><span>👤</span> All Students</div>
+      <div class="creator-nav-item" style="color:#b8bdd8;font-size:13px;padding:8px 14px;display:flex;align-items:center;gap:8px;"><span>👩‍🏫</span> Teachers (12)</div>
+      <div style="padding:10px 14px;font-size:10px;font-weight:600;letter-spacing:0.7px;color:#6b7080;text-transform:uppercase;margin-top:8px;">ALERTS</div>
+      <div data-screen="screen-coord-dash" style="cursor:pointer;" class="creator-nav-item" style="color:#b8bdd8;font-size:13px;padding:8px 14px;display:flex;align-items:center;gap:8px;"><span>⚠️</span> Irregulars <span style="margin-left:auto;background:#dc2626;color:#fff;font-size:10px;padding:1px 6px;border-radius:10px;">14</span></div>
+      <div data-screen="screen-coord-dash" style="cursor:pointer;" class="creator-nav-item" style="color:#b8bdd8;font-size:13px;padding:8px 14px;display:flex;align-items:center;gap:8px;"><span>🚪</span> Dropouts <span style="margin-left:auto;background:#d97706;color:#fff;font-size:10px;padding:1px 6px;border-radius:10px;">3</span></div>
+    </nav>
+    <main class="canvas-pad" style="flex:1;overflow-y:auto;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <div>
+          <div style="font-size:18px;font-weight:700;color:#1f2937;">Coordinator Dashboard</div>
+          <div style="font-size:12px;color:#6b7280;">M-Ward · 6 Schools · AY 2026-27 · as of 20-May-2026</div>
+        </div>
+        <select class="form-control" style="width:150px;height:30px;font-size:12px;"><option>All Schools</option><option>Deonar No. 01</option><option>Dharavi No. 03</option></select>
+      </div>
+
+      <div class="dash-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Total Students</div>
+          <div class="kpi-value">284</div>
+          <div class="kpi-sub">Across 6 schools</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Avg Attendance %</div>
+          <div class="kpi-value" style="color:#059669;">82%</div>
+          <div class="kpi-sub kpi-trend-up">↑ +3% vs last month</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Baseline Complete</div>
+          <div class="kpi-value" style="color:#2563eb;">71%</div>
+          <div class="kpi-sub">201 / 284 students</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Dropout Rate</div>
+          <div class="kpi-value" style="color:#dc2626;">4.2%</div>
+          <div class="kpi-sub kpi-trend-dn">↑ 12 students exited</div>
+        </div>
+      </div>
+
+      <div class="dash-section-title">⚠️ Attention Needed</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+        <div>
+          <div class="alert-card red">
+            <div class="alert-icon">👤</div>
+            <div class="alert-body">
+              <div class="alert-title">Irregular Students (&gt;3 absences / 15 days)</div>
+              <div class="alert-desc">Need coordinator follow-up this week</div>
+            </div>
+            <div class="alert-count red">14</div>
+          </div>
+          <div class="alert-card amber">
+            <div class="alert-icon">🚪</div>
+            <div class="alert-body">
+              <div class="alert-title">Potential Dropouts (&gt;90 days absent)</div>
+              <div class="alert-desc">No attendance record in last 3 months</div>
+            </div>
+            <div class="alert-count amber">3</div>
+          </div>
+          <div class="alert-card red">
+            <div class="alert-icon">📉</div>
+            <div class="alert-body">
+              <div class="alert-title">Performance Regression Alerts</div>
+              <div class="alert-desc">Midline Literacy Level &lt; Baseline level</div>
+            </div>
+            <div class="alert-count red">5</div>
+          </div>
+        </div>
+        <div>
+          <div class="alert-card blue">
+            <div class="alert-icon">🏫</div>
+            <div class="alert-body">
+              <div class="alert-title">Schools Without Baseline Completion</div>
+              <div class="alert-desc">&lt;90% students have Baseline done</div>
+            </div>
+            <div class="alert-count blue">2</div>
+          </div>
+          <div class="alert-card amber">
+            <div class="alert-icon">📊</div>
+            <div class="alert-body">
+              <div class="alert-title">FLN Monthly Tracking Pending</div>
+              <div class="alert-desc">May tracking not submitted by teachers</div>
+            </div>
+            <div class="alert-count amber">18</div>
+          </div>
+          <div class="alert-card green">
+            <div class="alert-icon">✅</div>
+            <div class="alert-body">
+              <div class="alert-title">Overdue Assessments (All Types)</div>
+              <div class="alert-desc">Past max-date across all programmes</div>
+            </div>
+            <div class="alert-count amber">7</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- School-wise baseline coverage -->
+      <div class="section-card">
+        <div class="dash-section-title">📈 School-wise Baseline Coverage</div>
+        <table class="att-table">
+          <thead><tr><th>School</th><th>Programme</th><th>Students</th><th>Baseline Done</th><th>Coverage</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Deonar No. 01</td><td>FLN</td><td>42</td><td>40</td><td><div class="prog-bar-wrap"><div class="prog-bar green" style="width:95%"></div></div> 95%</td><td><span class="badge badge-success">✓ Complete</span></td></tr>
+            <tr><td>Dharavi No. 03</td><td>Reading</td><td>38</td><td>30</td><td><div class="prog-bar-wrap"><div class="prog-bar amber" style="width:79%"></div></div> 79%</td><td><span class="badge badge-warning">⚠ Below 90%</span></td></tr>
+            <tr><td>Shivaji Nagar</td><td>Library</td><td>51</td><td>44</td><td><div class="prog-bar-wrap"><div class="prog-bar green" style="width:86%"></div></div> 86%</td><td><span class="badge badge-warning">⚠ Below 90%</span></td></tr>
+            <tr><td>Govandi No. 07</td><td>FLN</td><td>35</td><td>35</td><td><div class="prog-bar-wrap"><div class="prog-bar green" style="width:100%"></div></div> 100%</td><td><span class="badge badge-success">✓ Complete</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+</div>
+</div><!-- /screen-coord-dash -->
+
+
+<!-- ══════════════════════════════════════════════════════════
+     SCREEN 7 — Programme Manager Dashboard
+     ══════════════════════════════════════════════════════════ -->
+<div id="screen-pm-dash" class="screen">
+<div class="creator-shell theme-topnav-dark" style="flex:1;height:100%;flex-direction:column;">
+  <nav class="creator-navbar">
+    <div class="creator-navbar-logo">DS</div>
+    <div class="creator-navbar-app">
+      <div class="creator-navbar-app-name">Doorstep School MIS — Programme Manager</div>
+    </div>
+    <div class="creator-navbar-right">
+      <div class="creator-navbar-user"><div class="creator-navbar-avatar">BL</div> Brinda Lashkari</div>
+    </div>
+  </nav>
+  <div style="display:flex;flex:1;overflow:hidden;">
+    <nav class="creator-sidebar theme-dark-leftnav" style="width:180px;background:#1a1b2e;display:flex;flex-direction:column;flex-shrink:0;">
+      <div style="padding:10px 14px;font-size:10px;font-weight:600;letter-spacing:0.7px;color:#6b7080;text-transform:uppercase;">PROGRAMME</div>
+      <div data-screen="screen-pm-dash" style="cursor:pointer;" class="creator-nav-item active" style="color:#b8bdd8;font-size:13px;padding:8px 14px;display:flex;align-items:center;gap:8px;background:#5051f9;border-radius:4px;margin:0 8px;"><span>📊</span> Overview</div>
+      <div data-screen="screen-student-list" style="cursor:pointer;" class="creator-nav-item" style="color:#b8bdd8;font-size:13px;padding:8px 14px;display:flex;align-items:center;gap:8px;"><span>🏫</span> All Schools</div>
+      <div data-screen="screen-pm-dash" style="cursor:pointer;" class="creator-nav-item" style="color:#b8bdd8;font-size:13px;padding:8px 14px;display:flex;align-items:center;gap:8px;"><span>📈</span> Performance</div>
+      <div style="padding:10px 14px;font-size:10px;font-weight:600;letter-spacing:0.7px;color:#6b7080;text-transform:uppercase;margin-top:8px;">DONORS</div>
+      <div data-screen="screen-pm-dash" style="cursor:pointer;" class="creator-nav-item" style="color:#b8bdd8;font-size:13px;padding:8px 14px;display:flex;align-items:center;gap:8px;"><span>💰</span> Donor Impact</div>
+      <div data-screen="screen-pm-dash" style="cursor:pointer;" class="creator-nav-item" style="color:#b8bdd8;font-size:13px;padding:8px 14px;display:flex;align-items:center;gap:8px;"><span>📋</span> Reports</div>
+    </nav>
+    <main class="canvas-pad" style="flex:1;overflow-y:auto;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <div>
+          <div style="font-size:18px;font-weight:700;color:#1f2937;">Programme Overview — School Partnership</div>
+          <div style="font-size:12px;color:#6b7280;">AY 2026-27 · FLN + Reading + Library · Phase 1 Go-Live: June 2026</div>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <select class="form-control" style="width:130px;height:30px;font-size:12px;"><option>All Programmes</option><option>FLN</option><option>Reading</option><option>Library</option></select>
+          <button class="btn creator-btn-secondary btn-sm">Export Report</button>
+        </div>
+      </div>
+
+      <!-- Org Health KPIs -->
+      <div class="dash-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Total Enrolment</div>
+          <div class="kpi-value">1,247</div>
+          <div class="kpi-sub kpi-trend-up">↑ 87 new this month</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Avg Attendance</div>
+          <div class="kpi-value" style="color:#059669;">79%</div>
+          <div class="kpi-sub">Across 18 schools</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Dropout Rate</div>
+          <div class="kpi-value" style="color:#dc2626;">3.8%</div>
+          <div class="kpi-sub kpi-trend-dn">47 students exited</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Assessment Completion</div>
+          <div class="kpi-value" style="color:#2563eb;">68%</div>
+          <div class="kpi-sub">Baseline + Midline</div>
+        </div>
+      </div>
+
+      <div class="two-col-dash">
+        <!-- Literacy Level Distribution -->
+        <div class="section-card">
+          <div class="dash-section-title">📊 Literacy Level Distribution (FLN — Midline)</div>
+          <div style="display:flex;align-items:flex-end;gap:6px;height:80px;margin-bottom:8px;">
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;">
+              <div style="background:#991b1b;border-radius:3px 3px 0 0;width:100%;height:55px;"></div>
+              <div style="font-size:10px;color:#6b7280;">PL</div><div style="font-size:10px;font-weight:600;">18%</div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;">
+              <div style="background:#d97706;border-radius:3px 3px 0 0;width:100%;height:65px;"></div>
+              <div style="font-size:10px;color:#6b7280;">L1</div><div style="font-size:10px;font-weight:600;">22%</div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;">
+              <div style="background:#2563eb;border-radius:3px 3px 0 0;width:100%;height:58px;"></div>
+              <div style="font-size:10px;color:#6b7280;">L2</div><div style="font-size:10px;font-weight:600;">19%</div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;">
+              <div style="background:#5051f9;border-radius:3px 3px 0 0;width:100%;height:52px;"></div>
+              <div style="font-size:10px;color:#6b7280;">L3</div><div style="font-size:10px;font-weight:600;">17%</div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;">
+              <div style="background:#059669;border-radius:3px 3px 0 0;width:100%;height:36px;"></div>
+              <div style="font-size:10px;color:#6b7280;">L4</div><div style="font-size:10px;font-weight:600;">12%</div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;">
+              <div style="background:#059669;border-radius:3px 3px 0 0;width:100%;height:24px;"></div>
+              <div style="font-size:10px;color:#6b7280;">L5</div><div style="font-size:10px;font-weight:600;">8%</div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;">
+              <div style="background:#14532d;border-radius:3px 3px 0 0;width:100%;height:9px;"></div>
+              <div style="font-size:10px;color:#6b7280;">L6</div><div style="font-size:10px;font-weight:600;">3%</div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;">
+              <div style="background:#14532d;border-radius:3px 3px 0 0;width:100%;height:3px;"></div>
+              <div style="font-size:10px;color:#6b7280;">L7</div><div style="font-size:10px;font-weight:600;">1%</div>
+            </div>
+          </div>
+          <div style="font-size:11px;color:#6b7280;">356 FLN students assessed · Baseline→Midline comparison</div>
+        </div>
+
+        <!-- Attendance % distribution -->
+        <div class="section-card">
+          <div class="dash-section-title">📅 Attendance % Distribution (This Month)</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:11px;color:#6b7280;margin-bottom:3px;"><span>80–100%</span><span style="font-weight:600;color:#059669;">42% (524 students)</span></div>
+              <div class="prog-bar-wrap"><div class="prog-bar green" style="width:42%;"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:11px;color:#6b7280;margin-bottom:3px;"><span>60–80%</span><span style="font-weight:600;color:#2563eb;">28% (349 students)</span></div>
+              <div class="prog-bar-wrap"><div class="prog-bar" style="width:28%;background:#2563eb;"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:11px;color:#6b7280;margin-bottom:3px;"><span>40–60%</span><span style="font-weight:600;color:#d97706;">18% (224 students)</span></div>
+              <div class="prog-bar-wrap"><div class="prog-bar amber" style="width:18%;"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:11px;color:#6b7280;margin-bottom:3px;"><span>20–40%</span><span style="font-weight:600;color:#dc2626;">8% (100 students)</span></div>
+              <div class="prog-bar-wrap"><div class="prog-bar red" style="width:8%;"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:11px;color:#6b7280;margin-bottom:3px;"><span>0–20%</span><span style="font-weight:600;color:#991b1b;">4% (50 students)</span></div>
+              <div class="prog-bar-wrap"><div class="prog-bar red" style="width:4%;"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Donor-wise impact -->
+      <div class="section-card">
+        <div class="dash-section-title">💰 Donor-wise Impact Summary</div>
+        <table class="att-table">
+          <thead><tr><th>Donor</th><th>Programme</th><th>Schools Funded</th><th>Students</th><th>Avg Attendance</th><th>Baseline Done</th><th>L4+ Literacy</th></tr></thead>
+          <tbody>
+            <tr><td><strong>APF</strong><br><span style="font-size:10px;color:#6b7280;">Azim Premji Foundation</span></td><td>FLN + Reading</td><td>Deonar No.01, Dharavi No.03</td><td>187</td><td><span class="badge badge-success">83%</span></td><td><span class="badge badge-success">94%</span></td><td><span class="badge badge-info">28%</span></td></tr>
+            <tr><td><strong>L&T CSR</strong><br><span style="font-size:10px;color:#6b7280;">Larsen &amp; Toubro</span></td><td>FLN</td><td>Govandi No.07, Kurla No.02</td><td>142</td><td><span class="badge badge-warning">74%</span></td><td><span class="badge badge-warning">81%</span></td><td><span class="badge badge-info">21%</span></td></tr>
+            <tr><td><strong>DSS Internal</strong><br><span style="font-size:10px;color:#6b7280;">Doorstep School</span></td><td>Library</td><td>Shivaji Nagar, Govandi No.09</td><td>218</td><td><span class="badge badge-success">81%</span></td><td><span class="badge badge-success">91%</span></td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Regression and dropouts -->
+      <div class="two-col-dash">
+        <div class="section-card">
+          <div class="dash-section-title">📉 Performance Regression Alerts</div>
+          <div style="font-size:11px;color:#6b7280;margin-bottom:8px;">Students whose Midline Literacy Level &lt; Baseline</div>
+          <table class="att-table">
+            <thead><tr><th>Student</th><th>School</th><th>Baseline</th><th>Midline</th><th>Gap</th></tr></thead>
+            <tbody>
+              <tr><td>Aaryan Thorat</td><td>Deonar No.01</td><td><span class="level-badge level-l3">L3</span></td><td><span class="level-badge level-l2">L2</span></td><td style="color:#dc2626;font-weight:600;">↓1</span></td></tr>
+              <tr><td>Mohammed Arif</td><td>Dharavi No.03</td><td><span class="level-badge level-l4">L4</span></td><td><span class="level-badge level-l2">L2</span></td><td style="color:#dc2626;font-weight:600;">↓2</td></tr>
+              <tr><td>Sunita Kamble</td><td>Govandi No.07</td><td><span class="level-badge level-l2">L2</span></td><td><span class="level-badge level-l1">L1</span></td><td style="color:#dc2626;font-weight:600;">↓1</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="section-card">
+          <div class="dash-section-title">🚪 Dropout Trends — by Reason</div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;"><span>Absent &gt;3 Months</span><div style="display:flex;align-items:center;gap:6px;"><div class="prog-bar-wrap" style="width:80px;"><div class="prog-bar red" style="width:60%;"></div></div><span style="font-weight:600;">17</span></div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;"><span>Shifted Home</span><div style="display:flex;align-items:center;gap:6px;"><div class="prog-bar-wrap" style="width:80px;"><div class="prog-bar amber" style="width:35%;"></div></div><span style="font-weight:600;">10</span></div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;"><span>School Transfer</span><div style="display:flex;align-items:center;gap:6px;"><div class="prog-bar-wrap" style="width:80px;"><div class="prog-bar" style="width:25%;"></div></div><span style="font-weight:600;">7</span></div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;"><span>Not Interested</span><div style="display:flex;align-items:center;gap:6px;"><div class="prog-bar-wrap" style="width:80px;"><div class="prog-bar red" style="width:20%;"></div></div><span style="font-weight:600;">6</span></div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;"><span>Other</span><div style="display:flex;align-items:center;gap:6px;"><div class="prog-bar-wrap" style="width:80px;"><div class="prog-bar" style="width:15%;background:#9ca3af;"></div></div><span style="font-weight:600;">7</span></div></div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+</div><!-- /screen-pm-dash -->
+
+
+
 <script>
-/* ── Tab switching ── */
-function showTab(idx) {
-  document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', i === idx));
-  document.querySelectorAll('.dashboard').forEach((d, i) => d.classList.toggle('active', i === idx));
-  if (!chartsInit[idx]) initCharts(idx);
-}
+(function() {
 
-/* ── Chart defaults ── */
-const gridC = 'rgba(0,0,0,0.05)';
-const tickC = '#9C9A92';
-const tickFont = { family: "'DM Sans', sans-serif", size: 11 };
-Chart.defaults.font.family = "'DM Sans', sans-serif";
-Chart.defaults.plugins.legend.display = false;
-
-const chartsInit = [false, false, false, false];
-
-function initCharts(tab) {
-  chartsInit[tab] = true;
-
-  if (tab === 0) {
-    new Chart(document.getElementById('c-funnel'), {
-      type: 'bar',
-      data: {
-        labels: ['Identify', 'Contact/Intro', 'Explore', 'Proposal', 'Negotiation', 'Secured'],
-        datasets: [{ data: [18, 10, 8, 5, 4, 2], backgroundColor: ['#CECBF6','#AFA9EC','#9FE1CB','#FAC775','#85B7EB','#97C459'], borderRadius: 4, barPercentage: 0.7 }]
-      },
-      options: {
-        responsive: true, maintainAspectRatio: false, indexAxis: 'y',
-        scales: { x: { grid: { color: gridC }, ticks: { color: tickC, font: tickFont } }, y: { grid: { display: false }, ticks: { color: tickC, font: tickFont } } }
-      }
-    });
-    new Chart(document.getElementById('c-program'), {
-      type: 'doughnut',
-      data: {
-        labels: ['Incubation', 'Labs', 'CircleU', 'Non-program'],
-        datasets: [{ data: [1.8, 0.9, 1.0, 0.5], backgroundColor: ['#5C4FD6','#0E8A6A','#D85A30','#888880'], borderWidth: 0 }]
-      },
-      options: { responsive: true, maintainAspectRatio: false, cutout: '55%' }
-    });
+  // ── Core screen switcher ────────────────────────────────────
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(function(s){ s.style.display='none'; });
+    var el = document.getElementById(id);
+    if (el) el.style.display = 'flex';
+    document.querySelectorAll('.screen-tab').forEach(function(t){ t.classList.remove('active'); });
+    var tab = document.querySelector('.screen-tab[data-screen="'+id+'"]');
+    if (tab) tab.classList.add('active');
   }
 
-  if (tab === 1) {
-    new Chart(document.getElementById('c-deal-prog'), {
-      type: 'bar',
-      data: {
-        labels: ['Incubation', 'Labs', 'CircleU', 'Non-program'],
-        datasets: [{ data: [1.2, 0.8, 0.5, 0.3], backgroundColor: ['#5C4FD6','#0E8A6A','#D85A30','#888880'], borderRadius: 4, barPercentage: 0.6 }]
-      },
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        scales: {
-          x: { grid: { display: false }, ticks: { color: tickC, font: tickFont } },
-          y: { grid: { color: gridC }, ticks: { color: tickC, font: tickFont, callback: v => '₹' + v + ' Cr' } }
+  // ── Top switcher bar tabs ───────────────────────────────────
+  document.querySelectorAll('.screen-tab').forEach(function(tab){
+    tab.addEventListener('click', function(){
+      showScreen(this.getAttribute('data-screen'));
+    });
+  });
+
+  // ── Sidebar nav items with data-screen → navigate ──────────
+  document.querySelectorAll('[data-screen]').forEach(function(el){
+    if (el.classList.contains('screen-tab')) return; // already handled
+    el.addEventListener('click', function(e){
+      e.stopPropagation();
+      var target = this.getAttribute('data-screen');
+      if (target) showScreen(target);
+      // active state in sidebar
+      var sidebar = this.closest('nav, .creator-sidebar, .creator-app-nav');
+      if (sidebar) {
+        sidebar.querySelectorAll('.creator-nav-item, .crm-sidebar-item').forEach(function(n){
+          n.classList.remove('active');
+        });
+      }
+      this.classList.add('active');
+    });
+  });
+
+  // ── Sidebar nav items WITHOUT data-screen → active-only ────
+  document.querySelectorAll('.creator-nav-item:not([data-screen]), .crm-sidebar-item:not([data-screen])').forEach(function(item){
+    item.style.cursor = 'pointer';
+    item.addEventListener('click', function(){
+      var sidebar = this.closest('nav, .creator-sidebar, .creator-app-nav');
+      if (sidebar) {
+        sidebar.querySelectorAll('.creator-nav-item, .crm-sidebar-item').forEach(function(n){
+          n.classList.remove('active');
+        });
+      }
+      this.classList.add('active');
+    });
+  });
+
+  // ── CRM stage pills ─────────────────────────────────────────
+  document.querySelectorAll('.crm-stage-pill').forEach(function(p){
+    p.addEventListener('click', function(){
+      this.closest('.crm-stage-bar').querySelectorAll('.crm-stage-pill').forEach(function(x){ x.classList.remove('active'); });
+      this.classList.add('active');
+    });
+  });
+
+  // ── CRM detail tabs ─────────────────────────────────────────
+  document.querySelectorAll('.crm-detail-tab').forEach(function(t){
+    t.addEventListener('click', function(){
+      this.closest('.crm-detail-tabs').querySelectorAll('.crm-detail-tab').forEach(function(x){ x.classList.remove('active'); });
+      this.classList.add('active');
+    });
+  });
+
+  // ── Alert cards → navigate ──────────────────────────────────
+  document.querySelectorAll('.alert-card').forEach(function(card){
+    card.style.cursor = 'pointer';
+  });
+
+  // ── Attendance row toggle (present ↔ absent) ────────────────
+  document.querySelectorAll('.att-table tbody tr').forEach(function(row){
+    var presCell = row.cells[4];
+    if (!presCell) return;
+    presCell.style.cursor = 'pointer';
+    presCell.addEventListener('click', function(){
+      var span = this.querySelector('span');
+      if (!span) return;
+      var absent = this.querySelector('select');
+      if (span.textContent === '✅') {
+        span.textContent = '❌'; span.style.color='#dc2626';
+        row.style.background='#fff8f0';
+        if (!absent) {
+          var sel = document.createElement('select');
+          sel.className='form-control'; sel.style.cssText='height:26px;font-size:11px;width:160px;';
+          ['Unwell','Native Place','Shifted Home','Not Interested','Other'].forEach(function(o){
+            var opt=document.createElement('option'); opt.textContent=o; sel.appendChild(opt);
+          });
+          row.cells[5].innerHTML=''; row.cells[5].appendChild(sel);
         }
+      } else {
+        span.textContent='✅'; span.style.color='#059669';
+        row.style.background='';
+        row.cells[5].innerHTML='—';
       }
     });
-    new Chart(document.getElementById('c-funding'), {
-      type: 'doughnut',
-      data: {
-        labels: ['Restricted', 'Unrestricted'],
-        datasets: [{ data: [2.1, 0.7], backgroundColor: ['#5C4FD6','#888880'], borderWidth: 0 }]
-      },
-      options: { responsive: true, maintainAspectRatio: false, cutout: '55%' }
-    });
-  }
+  });
 
-  if (tab === 2) {
-    new Chart(document.getElementById('c-source'), {
-      type: 'bar',
-      data: {
-        labels: ['Board / Advisor', 'Internal Referral', 'Events', 'Cold Outreach', 'Website', 'Mobiliser', 'Social Media'],
-        datasets: [{ data: [14, 9, 7, 6, 5, 4, 2], backgroundColor: '#5C4FD6', borderRadius: 4, barPercentage: 0.65 }]
-      },
-      options: {
-        responsive: true, maintainAspectRatio: false, indexAxis: 'y',
-        scales: { x: { grid: { color: gridC }, ticks: { color: tickC, font: tickFont } }, y: { grid: { display: false }, ticks: { color: tickC, font: tickFont } } }
-      }
+  // ── Student list row → open student form ───────────────────
+  document.querySelectorAll('.creator-table tbody tr').forEach(function(row){
+    row.style.cursor = 'pointer';
+    row.addEventListener('click', function(e){
+      if (e.target.tagName === 'INPUT') return;
+      showScreen('screen-student-form');
     });
-    new Chart(document.getElementById('c-type'), {
-      type: 'doughnut',
-      data: {
-        labels: ['CSR', 'Foundation', 'Individual', 'Bi-lateral', 'Government', 'Institution'],
-        datasets: [{ data: [12, 8, 6, 4, 2, 2], backgroundColor: ['#5C4FD6','#0E8A6A','#D85A30','#3D7AE2','#6D9E22','#888880'], borderWidth: 0 }]
-      },
-      options: { responsive: true, maintainAspectRatio: false, cutout: '55%' }
-    });
-    new Chart(document.getElementById('c-heat'), {
-      type: 'bar',
-      data: {
-        labels: ['Identify', 'Contact', 'Explore', 'Proposal', 'Negotiation'],
-        datasets: [
-          { label: 'Hot', data: [1, 2, 3, 3, 2], backgroundColor: '#E24B4A', borderRadius: 3 },
-          { label: 'Warm', data: [3, 4, 3, 1, 1], backgroundColor: '#EF9F27', borderRadius: 3 },
-          { label: 'Cold', data: [14, 4, 2, 1, 1], backgroundColor: '#85B7EB', borderRadius: 3 }
-        ]
-      },
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        scales: { x: { stacked: true, grid: { display: false }, ticks: { color: tickC, font: tickFont } }, y: { stacked: true, grid: { color: gridC }, ticks: { color: tickC, font: tickFont } } }
-      }
-    });
-    new Chart(document.getElementById('c-capacity'), {
-      type: 'bar',
-      data: {
-        labels: ['0–25 L', '25–50 L', '50 L–1 Cr', '1–2 Cr', '2 Cr+'],
-        datasets: [{ data: [8, 12, 14, 7, 6], backgroundColor: '#0E8A6A', borderRadius: 4, barPercentage: 0.65 }]
-      },
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        scales: { x: { grid: { display: false }, ticks: { color: tickC, font: tickFont } }, y: { grid: { color: gridC }, ticks: { color: tickC, font: tickFont } } }
-      }
-    });
-    new Chart(document.getElementById('c-fcra'), {
-      type: 'doughnut',
-      data: {
-        labels: ['Local', 'FCRA'],
-        datasets: [{ data: [28, 6], backgroundColor: ['#0E8A6A','#3D7AE2'], borderWidth: 0 }]
-      },
-      options: { responsive: true, maintainAspectRatio: false, cutout: '55%' }
-    });
-    new Chart(document.getElementById('c-interest'), {
-      type: 'bar',
-      data: {
-        labels: ['Incubation', 'Labs', 'CircleU', 'Non-program'],
-        datasets: [{ data: [18, 12, 10, 7], backgroundColor: '#D85A30', borderRadius: 4, barPercentage: 0.6 }]
-      },
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        scales: { x: { grid: { display: false }, ticks: { color: tickC, font: tickFont } }, y: { grid: { color: gridC }, ticks: { color: tickC, font: tickFont } } }
-      }
-    });
-  }
+  });
 
-  if (tab === 3) {
-    new Chart(document.getElementById('c-owner'), {
-      type: 'bar',
-      data: {
-        labels: ['Ananya', 'Rahul', 'Priya', 'Deepak'],
-        datasets: [
-          { label: 'Identify/Contact', data: [5, 4, 4, 5], backgroundColor: '#CECBF6', borderRadius: 3 },
-          { label: 'Explore/Proposal', data: [5, 5, 4, 3], backgroundColor: '#9FE1CB', borderRadius: 3 },
-          { label: 'Negotiation', data: [4, 3, 3, 2], backgroundColor: '#FAC775', borderRadius: 3 }
-        ]
-      },
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        scales: { x: { stacked: true, grid: { display: false }, ticks: { color: tickC, font: tickFont } }, y: { stacked: true, grid: { color: gridC }, ticks: { color: tickC, font: tickFont } } }
-      }
+  // ── "View" links in list → student form ────────────────────
+  document.querySelectorAll('.creator-link').forEach(function(a){
+    a.style.cursor = 'pointer';
+    a.addEventListener('click', function(e){
+      e.stopPropagation();
+      var txt = this.closest('td') && this.textContent.trim();
+      if (txt === 'View') { showScreen('screen-student-form'); }
     });
-    new Chart(document.getElementById('c-followup'), {
-      type: 'bar',
-      data: {
-        labels: ['Ananya', 'Rahul', 'Priya', 'Deepak'],
-        datasets: [
-          { label: 'On time', data: [18, 14, 16, 10], backgroundColor: '#0E8A6A', borderRadius: 3 },
-          { label: 'Missed', data: [0, 2, 0, 5], backgroundColor: '#E24B4A', borderRadius: 3 }
-        ]
-      },
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        scales: { x: { stacked: true, grid: { display: false }, ticks: { color: tickC, font: tickFont } }, y: { stacked: true, grid: { color: gridC }, ticks: { color: tickC, font: tickFont } } }
-      }
-    });
-  }
-}
+  });
 
-/* Init first tab */
-initCharts(0);
+  // ── "+ Add Student" button → student form ──────────────────
+  document.querySelectorAll('.creator-btn-submit').forEach(function(btn){
+    if (btn.textContent.trim().indexOf('Add Student') !== -1) {
+      btn.addEventListener('click', function(){ showScreen('screen-student-form'); });
+    }
+    if (btn.textContent.trim().indexOf('Take Attendance') !== -1) {
+      btn.addEventListener('click', function(){ showScreen('screen-attendance'); });
+    }
+  });
+
+  // ── Show first screen ───────────────────────────────────────
+  showScreen('screen-student-form');
+
+})();
 </script>
 
 </body>
